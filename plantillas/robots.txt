@@ -16,6 +16,7 @@ Disallow: /*?orden=
 
 # ---------------------------------------------------------------------------
 # 2. Bots de IA: ELIGE UNA de las tres posturas y borra las otras dos
+#    Tokens verificados en la documentación de cada proveedor el 2026-08-14.
 # ---------------------------------------------------------------------------
 
 # --- POSTURA A: todo abierto ---------------------------------------------
@@ -38,26 +39,49 @@ User-agent: Bytespider
 Disallow: /
 
 # OJO: Google-Extended es SOLO entrenamiento de Gemini.
-# Bloquearlo NO te saca de la Búsqueda de Google ni afecta a tu posición.
+# Bloquearlo NO te saca de la Búsqueda de Google ni afecta a tu posición:
+# lo dice Google por escrito en su documentación de rastreadores.
 # El que te sacaría del buscador es bloquear a Googlebot, que es otro bot distinto.
 User-agent: Google-Extended
 Disallow: /
 
 # Estos NO se bloquean en esta postura: son los que te citan.
-# OAI-SearchBot  -> tus páginas en la búsqueda de ChatGPT
-# ChatGPT-User   -> visita en directo cuando alguien pregunta por tu página
-# PerplexityBot  -> el índice de respuestas de Perplexity
+# OAI-SearchBot     -> tus páginas en la búsqueda de ChatGPT
+# ChatGPT-User      -> visita en directo cuando alguien pregunta por tu página
+# Claude-SearchBot  -> el índice de búsqueda de Claude
+# Claude-User       -> visita en directo cuando alguien le pregunta a Claude
+# PerplexityBot     -> el índice de respuestas de Perplexity
+# Perplexity-User   -> visita en directo desde una pregunta de un usuario
 
 # --- POSTURA C: todo cerrado a la IA -------------------------------------
-# Añade a la postura B estas tres, sabiendo que desapareces de las respuestas de IA:
+# Añade a la postura B estas seis, sabiendo que desapareces de las respuestas de IA:
 # User-agent: OAI-SearchBot
 # Disallow: /
 #
 # User-agent: ChatGPT-User
 # Disallow: /
 #
+# User-agent: Claude-SearchBot
+# Disallow: /
+#
+# User-agent: Claude-User
+# Disallow: /
+#
 # User-agent: PerplexityBot
 # Disallow: /
+#
+# User-agent: Perplexity-User
+# Disallow: /
+#
+# Aviso: los bots que actúan por una acción del usuario no siempre obedecen.
+# Perplexity documenta que Perplexity-User "generalmente ignora las reglas de
+# robots.txt" porque la petición nace de una persona, no de un rastreo.
+
+# --- Extra que casi nadie conoce -----------------------------------------
+# OAI-AdsBot: valida las páginas que se envían como anuncios en ChatGPT y NO
+# alimenta el entrenamiento. Bloquéalo solo si no vas a anunciarte ahí.
+# Google-CloudVertexBot: solo rastrea si TÚ lo pides para un agente de Vertex AI,
+# y tampoco afecta a la Búsqueda de Google.
 
 # ---------------------------------------------------------------------------
 # 3. El sitemap, siempre explícito y con la URL absoluta

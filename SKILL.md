@@ -60,17 +60,27 @@ Plantilla: `plantillas/robots.txt`.
 Los bots de IA no son buscadores y no hacen todos lo mismo. Hay que separarlos en dos grupos y
 **preguntar al usuario**, porque esto no lo decide el que implementa:
 
-| Grupo | Ejemplos | Qué pasa si lo bloqueas |
+| Grupo | Tokens | Qué pasa si lo bloqueas |
 |---|---|---|
 | **Entrenamiento** | `GPTBot`, `ClaudeBot`, `CCBot`, `Google-Extended`, `Bytespider` | Tu contenido no entrena modelos. No pierdes visibilidad. |
-| **Consulta en directo** | `OAI-SearchBot`, `ChatGPT-User`, `PerplexityBot` | **Desapareces de las respuestas de las IA.** |
+| **Búsqueda y respuesta** | `OAI-SearchBot`, `ChatGPT-User`, `Claude-SearchBot`, `Claude-User`, `PerplexityBot`, `Perplexity-User` | **Desapareces de las respuestas de las IA.** |
+
+Verificado en la documentación de OpenAI, Anthropic, Perplexity, Common Crawl y Google el
+**2026-08-14**. Cada proveedor tiene ya un bot de índice y otro de visita en directo, así que la
+lista crece: reverifícala antes de escribir un `robots.txt`, no la copies de aquí a ciegas.
 
 ⚠️ **La trampa que se traga mucha gente:** `Google-Extended` **no afecta a tu posición ni a tu
-indexación en Google**, solo al entrenamiento de Gemini. El que te borra del buscador es bloquear
-a `Googlebot`, que es otro user-agent distinto. Confundirlos es autobloquearse.
+indexación en Google**, solo al entrenamiento de Gemini. Lo dice Google por escrito. El que te
+borra del buscador es bloquear a `Googlebot`, que es otro user-agent distinto. Confundirlos es
+autobloquearse.
 
-La postura por defecto para quien quiere visibilidad: **bloquear entrenamiento, permitir consulta.**
-Ofrecer siempre las tres posturas (todo abierto / mixta / todo cerrado) y que elija el usuario.
+⚠️ **Los bots de acción del usuario no siempre obedecen.** Perplexity documenta que
+`Perplexity-User` generalmente ignora `robots.txt` porque la petición nace de una persona. Si el
+objetivo es que ese contenido no salga, `robots.txt` no es la herramienta (paso 1).
+
+La postura por defecto para quien quiere visibilidad: **bloquear entrenamiento, permitir búsqueda
+y respuesta.** Ofrecer siempre las tres posturas (todo abierto / mixta / todo cerrado) y que elija
+el usuario.
 
 ### 3. Cimientos que no se negocian
 
