@@ -1,0 +1,13 @@
+{
+  "name": "webindex",
+  "description": "Leaves a website ready to be found: robots.txt, sitemap, canonical, Open Graph, JSON-LD and the AI-crawler decision, ending in a measurement.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Mun1to",
+    "url": "https://github.com/Mun1to"
+  },
+  "homepage": "https://github.com/Mun1to/WebIndex",
+  "repository": "https://github.com/Mun1to/WebIndex",
+  "license": "MIT",
+  "keywords": ["seo", "indexing", "robots-txt", "sitemap", "json-ld", "open-graph", "aeo", "web"]
+}

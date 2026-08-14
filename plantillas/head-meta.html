@@ -1,0 +1,54 @@
+<!--
+  Cabecera completa, plantilla de WebIndex.
+  Copia dentro de <head> y sustituye lo que va entre {{ }}.
+  Las longitudes recomendadas de title y descripción cambian: verifícalas en
+  Google Search Central antes de dar una cifra por buena.
+-->
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- 1. Lo básico. Title y descripción PROPIOS de esta página, nunca repetidos entre páginas -->
+<title>{{Título de esta página concreta}}</title>
+<meta name="description" content="{{Qué encuentra aquí el visitante, escrito como un anuncio: no posiciona solo, pero decide el clic.}}">
+
+<!-- 2. Canonical: la versión buena de esta URL, absoluta y con el dominio canónico -->
+<link rel="canonical" href="https://tudominio.com/{{ruta}}">
+
+<!-- 3. Indexación. Por defecto NO hace falta escribir nada: sin etiqueta, se indexa.
+     Descomenta SOLO para excluir una página concreta (gracias, login, resultados internos). -->
+<!-- <meta name="robots" content="noindex, follow"> -->
+
+<!-- 4. Open Graph: lo que se ve al pegar el enlace en WhatsApp, LinkedIn, Slack o Discord.
+     La imagen debe ser absoluta y existir de verdad. Formato habitual 1200x630. -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tudominio.com/{{ruta}}">
+<meta property="og:title" content="{{Título para compartir, puede ser más humano que el <title>}}">
+<meta property="og:description" content="{{Una frase que dé ganas de abrirlo}}">
+<meta property="og:image" content="https://tudominio.com/og.png">
+<meta property="og:image:alt" content="{{Qué se ve en la imagen}}">
+<meta property="og:site_name" content="{{Nombre del sitio}}">
+<meta property="og:locale" content="es_ES">
+
+<!-- 5. Twitter Card: sin esto, X recorta la tarjeta -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{Título para compartir}}">
+<meta name="twitter:description" content="{{Una frase que dé ganas de abrirlo}}">
+<meta name="twitter:image" content="https://tudominio.com/og.png">
+
+<!-- 6. hreflang: SOLO si hay URLs separadas por idioma (/es/, /en/).
+     Si intercambias los textos en la misma URL, esto no aplica y sobra. -->
+<link rel="alternate" hreflang="es" href="https://tudominio.com/es/{{ruta}}">
+<link rel="alternate" hreflang="en" href="https://tudominio.com/en/{{ruta}}">
+<link rel="alternate" hreflang="x-default" href="https://tudominio.com/{{ruta}}">
+
+<!-- 7. Detalles baratos -->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<meta name="color-scheme" content="light dark">
+
+<!--
+  COMPROBACIÓN, no lo des por hecho:
+  - Pega la URL en un chat de verdad y mira la tarjeta. Es el único test fiable de Open Graph.
+  - Inspección de URLs de Search Console: mira el HTML RENDERIZADO, no el que sirves.
+  - Si el sitio pinta el <head> con JavaScript, verifica que el bot lo ve.
+-->

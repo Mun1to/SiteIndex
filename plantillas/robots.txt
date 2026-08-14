@@ -1,0 +1,71 @@
+# robots.txt, plantilla de WebIndex
+# Sustituye tudominio.com y borra lo que no uses.
+# Comprueba los user-agents en la web de cada proveedor antes de darlos por buenos:
+# los bots de IA cambian de nombre y aparecen nuevos cada pocos meses.
+
+# ---------------------------------------------------------------------------
+# 1. Buscadores: abiertos, bloqueando solo lo inútil o duplicado
+# ---------------------------------------------------------------------------
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /carrito/
+Disallow: /checkout/
+Disallow: /*?buscar=
+Disallow: /*?orden=
+
+# ---------------------------------------------------------------------------
+# 2. Bots de IA: ELIGE UNA de las tres posturas y borra las otras dos
+# ---------------------------------------------------------------------------
+
+# --- POSTURA A: todo abierto ---------------------------------------------
+# No escribas nada. Sin reglas propias, los bots de IA caen bajo "User-agent: *".
+# Tu contenido entrena modelos y además te pueden citar.
+
+# --- POSTURA B (recomendada si buscas visibilidad): fuera del entrenamiento,
+#     dentro de las respuestas -----------------------------------------------
+# Bloquea a los que entrenan modelos y deja pasar a los que consultan en directo.
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+# OJO: Google-Extended es SOLO entrenamiento de Gemini.
+# Bloquearlo NO te saca de la Búsqueda de Google ni afecta a tu posición.
+# El que te sacaría del buscador es bloquear a Googlebot, que es otro bot distinto.
+User-agent: Google-Extended
+Disallow: /
+
+# Estos NO se bloquean en esta postura: son los que te citan.
+# OAI-SearchBot  -> tus páginas en la búsqueda de ChatGPT
+# ChatGPT-User   -> visita en directo cuando alguien pregunta por tu página
+# PerplexityBot  -> el índice de respuestas de Perplexity
+
+# --- POSTURA C: todo cerrado a la IA -------------------------------------
+# Añade a la postura B estas tres, sabiendo que desapareces de las respuestas de IA:
+# User-agent: OAI-SearchBot
+# Disallow: /
+#
+# User-agent: ChatGPT-User
+# Disallow: /
+#
+# User-agent: PerplexityBot
+# Disallow: /
+
+# ---------------------------------------------------------------------------
+# 3. El sitemap, siempre explícito y con la URL absoluta
+# ---------------------------------------------------------------------------
+Sitemap: https://tudominio.com/sitemap.xml
+
+# RECORDATORIO: robots.txt es un cartel, no un candado.
+# Y NO saca una página del índice: si otros la enlazan, puede salir igual.
+# Para excluirla de verdad, deja entrar al bot y sírvele <meta name="robots" content="noindex">
+# (o la cabecera X-Robots-Tag), o ponla detrás de contraseña.
+# Bloquear aquí + noindex a la vez se anula solo: el bot nunca llega a leer la etiqueta.

@@ -1,0 +1,30 @@
+# {{Nombre del sitio}}
+
+> {{Qué es este sitio en una o dos frases, en lenguaje llano.}}
+
+## Páginas principales
+
+- [Inicio](https://tudominio.com/): {{qué hay aquí}}
+- [Precios](https://tudominio.com/precios): {{planes y qué incluye cada uno}}
+- [Documentación](https://tudominio.com/docs): {{qué cubre}}
+- [Contacto](https://tudominio.com/contacto): {{cómo escribiros}}
+
+## Blog
+
+- [{{Título del artículo}}](https://tudominio.com/blog/{{ruta}}): {{de qué trata}}
+
+## Opcional
+
+- [Cambios](https://tudominio.com/changelog): historial de versiones
+- [Licencia](https://tudominio.com/licencia): condiciones de uso del contenido
+
+<!--
+  QUÉ ES ESTO, sin humo:
+  llms.txt es una PROPUESTA de la comunidad, no un estándar adoptado, y Google ha dicho
+  públicamente que no lo usa. Se coloca en https://tudominio.com/llms.txt
+
+  Ponlo si quieres: cuesta diez minutos y no hace daño. Pero NO lo cuentes como un canal,
+  no midas nada con él y no dejes que nadie te lo venda como servicio.
+  Lo que sí mueve la aguja para que te citen las IA está en el paso 7 de SKILL.md:
+  responder directo bajo cada encabezado y no bloquear a los bots de consulta.
+-->

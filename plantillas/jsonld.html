@@ -1,0 +1,105 @@
+<!--
+  JSON-LD, plantilla de WebIndex.
+  Copia SOLO los bloques que apliquen a la página y borra el resto.
+
+  Dos reglas que no se saltan:
+  1. El JSON-LD describe lo que se VE en la página. Marcar lo que no está visible
+     (valoraciones inventadas, preguntas que no existen) es motivo de penalización.
+  2. Valídalo en la prueba de resultados enriquecidos de Google antes de darlo por bueno.
+     Los campos obligatorios de cada tipo cambian: comprueba la galería de resultados
+     enriquecidos de Search Central en el momento, no de memoria.
+-->
+
+<!-- ORGANIZATION: en la portada. Quién eres, para que te entiendan como entidad. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "{{Nombre}}",
+  "url": "https://tudominio.com",
+  "logo": "https://tudominio.com/logo.png",
+  "description": "{{Qué hacéis, en una frase}}",
+  "sameAs": [
+    "https://github.com/{{usuario}}",
+    "https://www.linkedin.com/company/{{empresa}}"
+  ]
+}
+</script>
+
+<!-- WEBSITE: en la portada, junto al anterior. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "{{Nombre del sitio}}",
+  "url": "https://tudominio.com",
+  "inLanguage": "es"
+}
+</script>
+
+<!-- ARTICLE: en cada entrada del blog. El autor firma: cuenta para E-E-A-T. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{Título del artículo}}",
+  "description": "{{Resumen en una frase}}",
+  "image": "https://tudominio.com/{{imagen-del-articulo}}.png",
+  "datePublished": "{{2026-01-31}}",
+  "dateModified": "{{2026-01-31}}",
+  "author": {
+    "@type": "Person",
+    "name": "{{Nombre de quien escribe}}",
+    "url": "https://tudominio.com/sobre-mi"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{Nombre}}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://tudominio.com/logo.png"
+    }
+  },
+  "mainEntityOfPage": "https://tudominio.com/blog/{{ruta}}"
+}
+</script>
+
+<!-- FAQPAGE: solo si esas preguntas ESTÁN visibles en la página.
+     Es también el formato que mejor leen los asistentes de IA. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "{{La pregunta tal y como la haría alguien}}",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "{{La respuesta directa en las dos primeras frases, y luego el matiz.}}"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "{{Segunda pregunta}}",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "{{Segunda respuesta}}"
+      }
+    }
+  ]
+}
+</script>
+
+<!-- BREADCRUMBLIST: en páginas internas. Sustituye la URL fea por la ruta en el resultado. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://tudominio.com" },
+    { "@type": "ListItem", "position": 2, "name": "{{Sección}}", "item": "https://tudominio.com/{{seccion}}" },
+    { "@type": "ListItem", "position": 3, "name": "{{Esta página}}" }
+  ]
+}
+</script>

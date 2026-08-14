@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Sitemap, plantilla de WebIndex. Vive en https://tudominio.com/sitemap.xml
+  y se enlaza desde robots.txt con la línea "Sitemap:".
+
+  Qué entra: SOLO URLs indexables, finales y con respuesta 200.
+  Qué NO entra: nada con noindex, nada redirigido, nada bloqueado en robots.txt,
+  y ninguna URL que no sea la canónica. Meterlas es mandar señales contradictorias.
+
+  <lastmod> solo si es la fecha REAL del último cambio de contenido.
+  Poner la fecha de hoy en todas las URLs cada noche es ruido y deja de creérselo.
+  Los campos <changefreq> y <priority> se pueden omitir: Google los ignora.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://tudominio.com/</loc>
+    <lastmod>2026-01-31</lastmod>
+  </url>
+  <url>
+    <loc>https://tudominio.com/precios</loc>
+    <lastmod>2026-01-31</lastmod>
+  </url>
+  <url>
+    <loc>https://tudominio.com/blog/primer-articulo</loc>
+    <lastmod>2026-01-31</lastmod>
+  </url>
+</urlset>
+
+<!--
+  ¿Más de 50.000 URLs o el archivo pesa mucho? Se parte en varios y se publica un índice
+  (comprueba los límites vigentes en sitemaps.org antes de dimensionarlo):
+
+  <?xml version="1.0" encoding="UTF-8"?>
+  <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <sitemap><loc>https://tudominio.com/sitemap-paginas.xml</loc></sitemap>
+    <sitemap><loc>https://tudominio.com/sitemap-blog.xml</loc></sitemap>
+  </sitemapindex>
+-->
