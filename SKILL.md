@@ -32,6 +32,7 @@ verificado, no se inventa.
 | Nombres y user-agents de los bots de IA | La página de cada proveedor (OpenAI, Anthropic, Perplexity, Google) |
 | Tipos y campos obligatorios de datos estructurados | Galería de resultados enriquecidos de Google Search Central |
 | Qué buscadores admiten IndexNow | indexnow.org |
+| Plazo de refresco del favicon en resultados de Google | developers.google.com, «Favicon in Search» |
 
 Los user-agents son lo que más se mueve: aparecen bots nuevos cada pocos meses. Un `robots.txt`
 escrito hace un año está desactualizado por definición.
@@ -105,6 +106,15 @@ Si algo de esto falla, lo demás sobra:
 - **Bing Webmaster Tools:** la segunda opinión, y la puerta a **IndexNow** (avisas y se enteran
   Bing y compañía sin esperar al rastreo). Google no usa IndexNow, así que complementa a Search
   Console, no la sustituye.
+
+⚠️ **El favicon en los resultados va por su cuenta, aparte del resto del rastreo.** Es fácil
+comprobar que `favicon.ico` se sirve bien, está indexado y aun así Google sigue enseñando un icono
+viejo en el buscador (el típico susto: "¿por qué me sale el icono anterior si ya lo cambié?"). No es
+un fallo del sitio: Google lo cachea aparte y su propia documentación dice que el rastreo "puede
+tardar de varios días a varias semanas" sin dar un plazo fijo. No hay botón para forzarlo, solo
+**Inspección de URLs → Solicitar indexación** de la portada, que es justo lo que la documentación
+recomienda para acelerarlo. Verificado en
+`developers.google.com/search/docs/appearance/favicon-in-search` el 2026-08-18.
 
 Plantilla: `plantillas/sitemap.xml`.
 
