@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Sitemap, plantilla de WebIndex. Vive en https://tudominio.com/sitemap.xml
+  Sitemap, plantilla de SiteIndex. Vive en https://tudominio.com/sitemap.xml
   y se enlaza desde robots.txt con la línea "Sitemap:".
 
   Qué entra: SOLO URLs indexables, finales y con respuesta 200.

@@ -1,5 +1,5 @@
 ---
-name: webindex
+name: siteindex
 description: >-
   Deja una web lista para que la encuentren los buscadores y los asistentes de IA: robots.txt que
   no bloquea lo que importa, sitemap real, canonical, metadatos Open Graph, JSON-LD y la decisión
@@ -12,7 +12,7 @@ description: >-
   país rompe la indexación. Termina midiendo en Search Console, no opinando.
 ---
 
-# WebIndex, dejar una web lista para que la encuentren
+# SiteIndex, dejar una web lista para que la encuentren
 
 ## Qué logra
 

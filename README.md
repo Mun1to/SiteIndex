@@ -1,4 +1,4 @@
-# WebIndex
+# SiteIndex
 
 A Claude Code skill that leaves a website ready to be found: by search engines, and by the AI
 assistants people now ask instead of searching.
@@ -9,7 +9,7 @@ Inside Claude Code, two lines:
 
 ```
 /plugin marketplace add Mun1to/Vibeset
-/plugin install webindex@vibeset
+/plugin install siteindex@vibeset
 ```
 
 If the install summary says `Run /reload-plugins to activate`, run it.
@@ -18,14 +18,14 @@ If the install summary says `Run /reload-plugins to activate`, run it.
 <summary>Prefer to install it by hand?</summary>
 
 ```bash
-git clone https://github.com/Mun1to/WebIndex.git
-ln -s "$(pwd)/WebIndex" ~/.claude/skills/webindex
+git clone https://github.com/Mun1to/SiteIndex.git
+ln -s "$(pwd)/SiteIndex" ~/.claude/skills/siteindex
 ```
 
 On Windows, with PowerShell:
 
 ```powershell
-New-Item -ItemType Junction -Path "$env:USERPROFILE\.claude\skills\webindex" -Target "C:\path\to\WebIndex"
+New-Item -ItemType Junction -Path "$env:USERPROFILE\.claude\skills\siteindex" -Target "C:\path\to\SiteIndex"
 ```
 </details>
 

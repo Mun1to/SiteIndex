@@ -1,4 +1,4 @@
-# robots.txt, plantilla de WebIndex
+# robots.txt, plantilla de SiteIndex
 # Sustituye tudominio.com y borra lo que no uses.
 # Comprueba los user-agents en la web de cada proveedor antes de darlos por buenos:
 # los bots de IA cambian de nombre y aparecen nuevos cada pocos meses.
