@@ -37,10 +37,15 @@
 <meta name="twitter:image" content="https://tudominio.com/og.png">
 
 <!-- 6. hreflang: SOLO si hay URLs separadas por idioma (/es/, /en/).
-     Si intercambias los textos en la misma URL, esto no aplica y sobra. -->
+     Si intercambias los textos en la misma URL, esto no aplica y sobra.
+     La lista es IDÉNTICA en todas las versiones y cada una se incluye a sí misma;
+     si falta el enlace de vuelta, Google descarta el grupo entero.
+     El canonical de arriba apunta a ESTA URL, nunca a otro idioma.
+     Detalle completo y el aviso que sugiere idioma sin redirigir: plantillas/multiidioma.html -->
 <link rel="alternate" hreflang="es" href="https://tudominio.com/es/{{ruta}}">
 <link rel="alternate" hreflang="en" href="https://tudominio.com/en/{{ruta}}">
-<link rel="alternate" hreflang="x-default" href="https://tudominio.com/{{ruta}}">
+<link rel="alternate" hreflang="x-default" href="https://tudominio.com/en/{{ruta}}">
+<meta property="og:locale:alternate" content="en_US">
 
 <!-- 7. Detalles baratos -->
 <link rel="icon" href="/favicon.ico" sizes="any">

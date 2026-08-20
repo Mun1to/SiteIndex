@@ -1,0 +1,132 @@
+<!--
+  Web en varios idiomas, plantilla de WebIndex.
+
+  REGLA DE ORO: cada idioma es una URL distinta (/es/, /en/), y esa URL se sirve
+  siempre tal cual se pide. Nunca se redirige a nadie fuera de la versión que pidió.
+  Google rastrea SIN cabecera Accept-Language y sobre todo desde IPs de Estados Unidos:
+  si la web redirige por idioma o por país, el bot cae siempre en la misma versión y
+  las demás no se indexan.
+  Verificado en developers.google.com/search/docs/specialty/international el 2026-08-20.
+-->
+
+
+<!-- ============================================================
+     OPCIÓN A. Etiquetas <link> en el <head>. La más usada.
+     Va en TODAS las versiones, y en todas la lista es la MISMA:
+     cada página se incluye a sí misma y a todas las demás.
+     ============================================================ -->
+
+<!-- Esto es lo que lleva https://tudominio.com/es/precios ... -->
+<link rel="alternate" hreflang="es" href="https://tudominio.com/es/precios">
+<link rel="alternate" hreflang="en" href="https://tudominio.com/en/pricing">
+<link rel="alternate" hreflang="x-default" href="https://tudominio.com/en/pricing">
+
+<!-- ... y https://tudominio.com/en/pricing lleva EXACTAMENTE lo mismo.
+     Si una versión no apunta de vuelta a la otra, Google descarta el grupo entero
+     ("missing return links", el error que más sale en Search Console). -->
+
+<!-- Canonical: cada idioma es canónico de SÍ MISMO.
+     Apuntar el canonical de /es/ hacia /en/ borra la versión española del índice. -->
+<link rel="canonical" href="https://tudominio.com/es/precios">
+
+<!-- Y el idioma real de esta página, en el <html>: <html lang="es"> -->
+
+<!-- Open Graph, para que la tarjeta del enlace también salga en su idioma -->
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
+
+
+<!-- ============================================================
+     OPCIÓN B. Cabecera HTTP. Para PDF y archivos que no son HTML.
+     Se configura en el servidor, no en el documento:
+
+     Link: <https://tudominio.com/es/manual.pdf>; rel="alternate"; hreflang="es",
+           <https://tudominio.com/en/manual.pdf>; rel="alternate"; hreflang="en"
+     ============================================================ -->
+
+
+<!-- ============================================================
+     OPCIÓN C. En el sitemap. Cómoda si el sitemap se genera solo.
+     Se declara el espacio de nombres xhtml y cada <url> lista todas sus variantes:
+
+     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+             xmlns:xhtml="http://www.w3.org/1999/xhtml">
+       <url>
+         <loc>https://tudominio.com/es/precios</loc>
+         <xhtml:link rel="alternate" hreflang="es" href="https://tudominio.com/es/precios"/>
+         <xhtml:link rel="alternate" hreflang="en" href="https://tudominio.com/en/pricing"/>
+       </url>
+       <url>
+         <loc>https://tudominio.com/en/pricing</loc>
+         <xhtml:link rel="alternate" hreflang="es" href="https://tudominio.com/es/precios"/>
+         <xhtml:link rel="alternate" hreflang="en" href="https://tudominio.com/en/pricing"/>
+       </url>
+     </urlset>
+
+     Se elige UNA de las tres opciones. Mezclarlas solo multiplica los sitios
+     donde se puede quedar una URL desactualizada.
+     ============================================================ -->
+
+
+<!-- ============================================================
+     CÓDIGOS DE IDIOMA
+     Idioma en ISO 639-1, y detrás, OPCIONAL, la región en ISO 3166-1 Alpha 2.
+       es          -> español, para todos los hispanohablantes
+       es-MX       -> español de México
+       en-GB       -> inglés del Reino Unido (es GB, no UK: Google ignora "UK")
+       x-default   -> a dónde va quien no encaja en ninguna
+     NUNCA la región sola: "MX" no es un valor válido.
+     Separar por país solo si cambia algo de verdad: precio, moneda, envío o
+     condiciones legales. Si no cambia nada, un solo /es/ es una web menos que mantener.
+     ============================================================ -->
+
+
+<!-- ============================================================
+     EL AVISO QUE SUGIERE IDIOMA SIN REDIRIGIR
+     Esto es lo que sustituye a la redirección automática: se detecta, se sugiere,
+     y decide la persona. El bot ve la página que pidió, y el visitante también.
+     ============================================================ -->
+
+<div id="aviso-idioma" hidden>
+  <span>This page is also available in English.</span>
+  <a href="/en/pricing" data-elige-idioma="en">Read in English</a>
+  <button type="button" data-cierra-aviso>No, thanks</button>
+</div>
+
+<script>
+  (function () {
+    var ESTA = 'es';                      // idioma de ESTA página
+    var GUARDADO = 'idioma-elegido';
+
+    // 1. Lo que la persona eligió a mano gana por encima de todo.
+    var elegido = localStorage.getItem(GUARDADO);
+    if (elegido) return;                  // ya decidió: ni se sugiere
+
+    // 2. Su preferencia real declarada, la del navegador. Nunca la IP.
+    var suyo = (navigator.languages || [navigator.language || ''])[0].slice(0, 2).toLowerCase();
+    if (!suyo || suyo === ESTA) return;   // ya está en su idioma
+
+    // 3. Solo se sugiere si esa versión existe de verdad.
+    var enlace = document.querySelector('[data-elige-idioma="' + suyo + '"]');
+    if (!enlace) return;
+
+    document.getElementById('aviso-idioma').hidden = false;
+    enlace.addEventListener('click', function () { localStorage.setItem(GUARDADO, suyo); });
+    document.querySelector('[data-cierra-aviso]').addEventListener('click', function () {
+      localStorage.setItem(GUARDADO, ESTA);
+      document.getElementById('aviso-idioma').hidden = true;
+    });
+  })();
+</script>
+
+<!--
+  SI AUN ASÍ SE QUIERE REDIRIGIR, que sea SOLO en la raíz "/" (que no es la versión
+  de nadie) y nunca en una URL de idioma explícita. Y el selector de idioma, siempre
+  visible y con enlaces <a href> reales: es el camino por el que el rastreador
+  descubre las demás versiones.
+
+  COMPROBACIÓN:
+  - Search Console -> Inspección de URLs sobre /es/ y sobre /en/: las dos indexables.
+  - curl -I https://tudominio.com/en/precios  ->  200, no un 301 al español.
+  - Search Console avisa de "missing return links" si falta algún enlace de vuelta.
+-->

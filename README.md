@@ -42,8 +42,9 @@ walks `robots.txt`, canonical host, mobile HTML, real 404s and sitemap before it
 meta tag.
 
 **2. The AI bot decision belongs to you, not to the agent.** Training crawlers (`GPTBot`,
-`ClaudeBot`, `CCBot`, `Google-Extended`) and live-answer crawlers (`OAI-SearchBot`, `ChatGPT-User`,
-`PerplexityBot`) are two different groups with two different consequences. Block the first and you
+`ClaudeBot`, `CCBot`, `Google-Extended`, `Bytespider`) and live-answer crawlers (`OAI-SearchBot`,
+`ChatGPT-User`, `Claude-SearchBot`, `Claude-User`, `PerplexityBot`, `Perplexity-User`) are two
+different groups with two different consequences. Block the first and you
 lose nothing visible; block the second and you disappear from AI answers. And the classic trap:
 `Google-Extended` has no effect on your Google Search ranking or indexing, which is not what most
 robots files out there assume.
@@ -52,16 +53,25 @@ robots files out there assume.
 and structured-data requirements all expire. The skill carries the procedure and a table of where
 to check each number at the moment of use, so it does not quote a stale figure with confidence.
 
-**4. It ends in a measurement.** Search Console, PageSpeed, server logs, and asking the assistants
+**4. Multilingual sites get their own step.** One URL per language (`/es/`, `/en/`), `hreflang`
+with self-reference and return links, `x-default`, and a canonical that points at itself instead of
+at another language. Above all: no automatic redirect by language or country. Googlebot sends no
+`Accept-Language` header and crawls mostly from US addresses, so a site that redirects everyone
+lands the crawler on the same version every time and the rest never get indexed. Detect, suggest,
+let the person choose.
+
+**5. It ends in a measurement.** Search Console, PageSpeed, server logs, and asking the assistants
 your own key questions once a month. Not an opinion about whether it should rank by now.
 
 ## What is in the box
 
-- `SKILL.md`, the full procedure in eight steps, the six failures that break indexing most often,
+- `SKILL.md`, the full procedure in nine steps, the seven failures that break indexing most often,
   and a checklist.
 - `plantillas/robots.txt`, commented, with three AI postures to choose from.
 - `plantillas/head-meta.html`, the complete head: title, description, canonical, Open Graph,
   Twitter Card, hreflang.
+- `plantillas/multiidioma.html`, the three ways to declare `hreflang` (head, HTTP header, sitemap)
+  plus a language banner that suggests instead of redirecting.
 - `plantillas/jsonld.html`, ready-made blocks for Organization, WebSite, Article, FAQPage and
   BreadcrumbList.
 - `plantillas/sitemap.xml`, a minimal sitemap plus the index variant.

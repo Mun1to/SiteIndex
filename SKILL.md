@@ -6,8 +6,10 @@ description: >-
   de qué bots de IA entran (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended).
   Úsalo al publicar una web nueva o preparar su lanzamiento, al auditar el SEO técnico de un sitio
   ya vivo, y cuando el usuario diga "no salgo en Google", "no me indexa", "quiero que ChatGPT o
-  Perplexity me citen", "revísame el robots.txt" o "ponme los metadatos". Termina midiendo en
-  Search Console, no opinando.
+  Perplexity me citen", "revísame el robots.txt" o "ponme los metadatos". Cubre también las webs en varios
+  idiomas:
+  estructura de URL con /es/ y /en/, hreflang, y por qué redirigir automáticamente por idioma o por
+  país rompe la indexación. Termina midiendo en Search Console, no opinando.
 ---
 
 # WebIndex, dejar una web lista para que la encuentren
@@ -32,6 +34,7 @@ verificado, no se inventa.
 | Nombres y user-agents de los bots de IA | La página de cada proveedor (OpenAI, Anthropic, Perplexity, Google) |
 | Tipos y campos obligatorios de datos estructurados | Galería de resultados enriquecidos de Google Search Central |
 | Qué buscadores admiten IndexNow | indexnow.org |
+| Reglas de `hreflang` y códigos de idioma admitidos | Google Search Central, «Localized versions» |
 | Plazo de refresco del favicon en resultados de Google | developers.google.com, «Favicon in Search» |
 
 Los user-agents son lo que más se mueve: aparecen bots nuevos cada pocos meses. Un `robots.txt`
@@ -130,11 +133,112 @@ Cada página necesita, como mínimo:
 - **Open Graph** (`og:title`, `og:description`, `og:image`, `og:url`) y Twitter Card. No es SEO,
   es lo que se ve al pegar el enlace en WhatsApp, LinkedIn o Slack, y es lo primero que nota el
   usuario cuando falta.
-- **`hreflang`** solo si hay URLs separadas por idioma.
+- **`hreflang`** solo si hay URLs separadas por idioma, y entonces con las reglas del paso 6.
 
 Plantilla: `plantillas/head-meta.html`.
 
-### 6. JSON-LD, traducir la página al idioma de la máquina
+### 6. Varios idiomas: la barra `/es/` y `hreflang`
+
+Este paso aplica **solo si la web existe en más de un idioma o para más de un país**. Si es de un
+idioma solo, saltarlo entero: un `hreflang` mal puesto hace más daño que no ponerlo.
+
+#### 6.1 Primero la estructura de URL
+
+Cada idioma necesita **su propia dirección**. Lo que se ve en `dominio.com/es/precios` no es magia
+de detección: es que la versión española **es otra página**, con su URL, que se puede enlazar,
+compartir e indexar por separado. Sin eso, el buscador solo conoce una página y solo puede
+enseñarla en un idioma.
+
+| Estructura | Ejemplo | Cuándo usarla |
+|---|---|---|
+| **Subcarpeta** | `dominio.com/es/precios` | **La opción por defecto.** Fácil de montar, un solo dominio y toda la autoridad concentrada. |
+| Subdominio | `es.dominio.com/precios` | Cuando cada idioma vive en un servidor o lo lleva otro equipo. |
+| Dominio por país | `dominio.es` | Solo con presupuesto y equipo por país: son sitios independientes y cada uno se gana su reputación desde cero. |
+| Parámetro | `dominio.com?lang=es` | **Google lo marca como no recomendado.** No usarlo. |
+
+**Idioma y país no son lo mismo.** `es` es "español"; `es-MX` es "español de México". Se separa por
+país solo si de verdad cambia algo real (precio, moneda, envío, condiciones legales). Si no cambia
+nada, un solo `/es/` para todos los hispanohablantes es una web menos que mantener.
+
+#### 6.2 `hreflang`, el mapa entre las versiones
+
+`hreflang` es lo que le dice al buscador "estas URLs son la misma página en otro idioma", para que
+enseñe la correcta a cada persona en vez de tratarlas como contenido duplicado. Tres formas
+equivalentes, según Google: etiquetas `<link>` en la cabecera, cabecera HTTP `Link` (para PDF y
+archivos que no son HTML) o anotaciones `<xhtml:link>` dentro del sitemap. Se elige **una**.
+
+Las tres reglas que lo rompen casi siempre:
+
+1. **Cada versión se lista a sí misma** además de a las demás. Una página que no se autorreferencia
+   deja el grupo cojo.
+2. **Los enlaces son de ida y vuelta.** Si `/es/` apunta a `/en/`, `/en/` tiene que apuntar a `/es/`.
+   Sin ese enlace de retorno, Google ignora la anotación entera ("missing return links" es el error
+   que más sale en Search Console).
+3. **`x-default` para quien no encaja en ninguna.** Es el valor reservado para el visitante cuyo
+   idioma no está en la lista.
+
+Códigos: idioma en ISO 639-1 y, opcional detrás, región en ISO 3166-1 Alpha 2. **Nunca región sola.**
+Google ignora inventos como `EU`, `UN` o `UK` (el del Reino Unido es `GB`).
+
+⚠️ **El error que borra un idioma del buscador:** poner el `rel="canonical"` de `/es/precios`
+apuntando a `/en/pricing`. Eso es decirle a Google que la página buena es la inglesa y que la
+española no debe indexarse. **Cada URL de idioma es canónica de sí misma**, y las demás versiones
+se declaran con `hreflang`, no con canonical.
+
+#### 6.3 La detección automática, que es donde se rompe la indexación
+
+Aquí está el punto delicado, y va con aviso de la propia documentación de Google (verificado el
+**2026-08-20**):
+
+- Googlebot **manda sus peticiones sin la cabecera `Accept-Language`**, así que no le puede decir a
+  la web en qué idioma la quiere.
+- Rastrea sobre todo desde direcciones IP de Estados Unidos, aunque ya también desde otros países.
+- Google recomienda **no redirigir automáticamente** al visitante de una versión a otra, porque
+  "esas redirecciones pueden impedir que los usuarios (y los buscadores) vean todas las versiones
+  del sitio".
+- Y avisa de que si el contenido cambia solo por cookie o por configuración del navegador en la
+  misma URL, **puede no encontrar ni rastrear todas las variantes**.
+
+Traducido: si la web redirige a todo el mundo según su idioma o su IP, el bot que llega sin idioma
+y desde Estados Unidos acaba siempre en la misma versión, y las otras nunca se indexan. La web
+funciona perfectamente para las personas y es invisible a medias para el buscador.
+
+**La forma que sí funciona:**
+
+1. **Servir siempre lo que se pide.** Si la petición es `/en/precios`, se sirve `/en/precios`,
+   aunque el navegador venga en español. Una URL de idioma explícita **no se redirige jamás**.
+2. **Detectar solo en la raíz.** La única URL donde tiene sentido mandar a un idioma u otro es
+   `dominio.com/`, que no es la versión de nadie. Y aun ahí, mejor sugerir que obligar.
+3. **Sugerir con un aviso, no con un salto.** Una franja de "esta página está en español,
+   ¿la abres?" con un enlace deja al visitante y al bot ver la página que pidieron.
+4. **Recordar la elección** en cookie o `localStorage`, y respetarla por encima de cualquier
+   detección: lo que la persona eligió a mano gana siempre.
+5. **Selector de idioma visible y con enlaces `<a href>` de verdad**, no un botón de JavaScript.
+   Ese selector es el camino por el que el rastreador descubre las demás versiones.
+
+El orden de preferencia para adivinar el idioma, de más fiable a menos: primero, lo que el visitante
+eligió antes y quedó guardado en una cookie; después, la cabecera `Accept-Language` que manda su
+navegador, que es su preferencia real declarada; y en último lugar la ubicación por IP, que es la
+peor de las tres, porque una VPN, un móvil en itinerancia o un turista la tumban, y porque estar en
+un país no dice en qué idioma se lee.
+
+La parte de cliente (arrancar en el idioma y el tema del visitante sin parpadeo y sin forzar
+redirecciones) la cubre la skill **SmartDefaults**. Aquí se decide **qué URLs existen y cómo se
+anotan**, que es lo que ve el buscador.
+
+#### 6.4 El resto de señales de idioma
+
+- **`<html lang="es">`** en cada página, con el idioma real de esa página. Lo usan los buscadores y
+  los lectores de pantalla.
+- **Traducción de verdad**, incluidos `<title>`, meta descripción, URL y textos de imagen. La misma
+  página en inglés colgada bajo `/es/` no es una versión española.
+- **Un sitemap con todas las URLs de todos los idiomas**, no solo las del principal.
+- **`og:locale`** con el idioma de la página y **`og:locale:alternate`** con los otros, para que la
+  tarjeta que se ve al pegar el enlace también salga bien.
+
+Plantilla: `plantillas/multiidioma.html`.
+
+### 7. JSON-LD, traducir la página al idioma de la máquina
 
 Los datos estructurados desbloquean resultados enriquecidos y ayudan a que te entiendan como
 entidad. Tipos habituales: `Organization`, `WebSite`, `Article`, `FAQPage`, `Product`,
@@ -146,7 +250,7 @@ bueno.
 
 Plantilla: `plantillas/jsonld.html`.
 
-### 7. Que te citen las IA (AEO)
+### 8. Que te citen las IA (AEO)
 
 - **Responder en las dos o tres primeras frases** debajo de cada encabezado, y desarrollar debajo.
   Los modelos buscan la respuesta directa, no el rodeo.
@@ -160,7 +264,7 @@ Plantilla: `plantillas/jsonld.html`.
   públicamente que no lo usa. Cuesta diez minutos y no hace daño, así que se puede poner, pero no
   se cuenta como canal ni se vende como tal. Plantilla: `plantillas/llms.txt`.
 
-### 8. Medir, que es donde acaba el trabajo
+### 9. Medir, que es donde acaba el trabajo
 
 Ninguna de las tareas anteriores está terminada hasta que se ve el efecto:
 
@@ -186,6 +290,9 @@ Antes de tocar nada en una web que "no sale en Google", descartar estos por orde
 5. **Canonical apuntando a otra página** (típico de plantillas copiadas): le estás diciendo al
    buscador que esa página no es la buena.
 6. **Contenido que solo existe tras ejecutar JavaScript**, en un sitio que además tarda en pintar.
+7. **Redirección automática por idioma o por país** en un sitio multiidioma: el bot llega sin
+   `Accept-Language` y desde Estados Unidos, cae siempre en la misma versión y las demás no se
+   indexan nunca (paso 6).
 
 ## Contenido generado con IA
 
@@ -205,6 +312,9 @@ corresponda, y la etiqueta no cuesta nada al lado de una penalización.
 - [ ] ¿Cada página con `<title>` y meta descripción propios, y un solo `<h1>`?
 - [ ] ¿`rel="canonical"` correcto en las páginas con parámetros o duplicados?
 - [ ] ¿Open Graph completo y con imagen, comprobado pegando el enlace en un chat de verdad?
+- [ ] Si hay varios idiomas: ¿cada uno con su URL propia, `hreflang` con autorreferencia y enlaces
+      de vuelta, `x-default`, y ninguna redirección automática forzada?
+- [ ] Si hay varios idiomas: ¿el `canonical` de cada página apunta a sí misma y no a otro idioma?
 - [ ] ¿JSON-LD validado y describiendo lo que se ve en la página?
 - [ ] ¿Contenido visible en el HTML servido, no solo tras ejecutar JS?
 - [ ] ¿Medido en Search Console y PageSpeed, con la fecha de la comprobación anotada?
@@ -229,5 +339,7 @@ falta, tratarlo aparte con fuentes verificadas en el momento.
   Twitter Card y hreflang.
 - `plantillas/jsonld.html`, bloques JSON-LD listos para `Organization`, `WebSite`, `Article`,
   `FAQPage` y `BreadcrumbList`.
+- `plantillas/multiidioma.html`, las tres formas de declarar `hreflang` (cabecera, HTTP y sitemap)
+  más el aviso que sugiere idioma sin redirigir.
 - `plantillas/sitemap.xml`, ejemplo mínimo con índice de sitemaps.
 - `plantillas/llms.txt`, con la advertencia de qué es y qué no es.
