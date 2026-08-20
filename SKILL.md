@@ -99,6 +99,11 @@ Si algo de esto falla, lo demás sobra:
 - **Que el contenido esté en el HTML.** Si la página lo pinta todo con JavaScript en el cliente,
   comprobar qué ve el bot (Inspección de URLs de Search Console, pestaña de HTML renderizado).
   Ante la duda, renderizado en servidor o pre-render.
+- **Si la web lleva movimiento, cruza con la skill `frontlaxweb` antes de construirlo.** El
+  storytelling al scroll es donde este fallo nace: los textos acaban dentro de componentes que
+  solo existen cuando el JavaScript monta y el elemento entra en viewport. Un reveal debe ocultar
+  por CSS algo que YA está en el HTML, nunca decidir en JavaScript si el texto existe. Ese skill
+  lleva la contraparte escrita, con lo que cada efecto le hace al LCP, al INP y al CLS.
 
 ### 4. Sitemap y darse de alta
 
@@ -324,7 +329,10 @@ corresponda, y la etiqueta no cuesta nada al lado de una penalización.
 Se dice de frente en vez de improvisar:
 
 - **Reputación de correo y entregabilidad** (SPF, DKIM, DMARC, listas de bloqueo). Es otro
-  territorio, con sus propias reglas.
+  territorio, con sus propias reglas. Queda fuera del alcance, pero no hace falta dejar al
+  usuario sin nada: para mirarlo por su cuenta están Spamhaus (si el dominio o la IP están en
+  listas de spam) y MXToolbox Email Health (MX, SPF, DMARC y listas negras de un tirón, un
+  análisis gratis al día), los dos en vibeset.dev/resources.
 - **Geo SEO local** (perfil de empresa, coherencia de nombre-dirección-teléfono, reseñas).
 - **Enlaces entrantes y autoridad.** Aquí no hay atajo técnico: se gana con contenido que alguien
   quiera enlazar.
