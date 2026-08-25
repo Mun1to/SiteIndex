@@ -1,6 +1,6 @@
 # Referencia: bots de IA, funciones de IA de Google y cómo se mide
 
-Detalle de las fases 2 y 11 del `SKILL.md`.
+Detalle de las fases 2 y 13 del `SKILL.md`.
 
 ⚠️ **Esta tabla caduca.** Los proveedores añaden bots cada pocos meses y cambian de nombre. Antes de
 escribir un `robots.txt`, abrir las páginas de la última columna y confirmar. La fecha de cada fila

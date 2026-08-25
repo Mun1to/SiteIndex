@@ -1,6 +1,6 @@
 # Referencia: negocio local
 
-Detalle de la fase 12 del `SKILL.md`. Lo entrecomillado está verificado en
+Detalle de la fase 11 del `SKILL.md`. Lo entrecomillado está verificado en
 `support.google.com/business/answer/7091` el **2026-08-25**.
 
 Aplica solo si el negocio atiende a clientes en un sitio físico o en una zona concreta. Si vende a

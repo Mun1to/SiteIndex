@@ -1,6 +1,6 @@
 # Referencia: velocidad, rastreo y estructura técnica
 
-Detalle de las fases 9 y 10 del `SKILL.md`. Verificado en `web.dev` y en
+Detalle de las fases 7 y 10 del `SKILL.md`. Verificado en `web.dev` y en
 `developers.google.com/search/docs/crawling-indexing` el **2026-08-25**.
 
 ## 1. Core Web Vitals

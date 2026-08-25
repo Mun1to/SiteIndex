@@ -1,6 +1,6 @@
 # Referencia: webs en varios idiomas
 
-Detalle de la fase 6 del `SKILL.md`. Verificado contra la documentacion de Google Search Central
+Detalle de la fase 5 del `SKILL.md`. Verificado contra la documentacion de Google Search Central
 (`developers.google.com/search/docs/specialty/international`) el 2026-08-20.
 
 ## Lo que hay que decidir y en qué orden
