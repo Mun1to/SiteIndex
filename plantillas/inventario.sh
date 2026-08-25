@@ -37,7 +37,8 @@ if [ "$R" = "200" ]; then
   echo "  Disallow totales : $(grep -ci '^[[:space:]]*Disallow:[[:space:]]*/[[:space:]]*$' /tmp/si_robots.txt)"
   echo "  linea Sitemap    : $(grep -i '^[[:space:]]*Sitemap:' /tmp/si_robots.txt | sed 's/^[[:space:]]*//' | tr '\n' ' ')"
   echo "  bots de IA nombrados:"
-  grep -ioE 'GPTBot|OAI-SearchBot|OAI-AdsBot|ChatGPT-User|ClaudeBot|Claude-SearchBot|Claude-User|anthropic-ai|CCBot|Google-Extended|PerplexityBot|Perplexity-User|Bytespider|Applebot-Extended|meta-externalagent|Amazonbot' /tmp/si_robots.txt | sort -u | sed 's/^/    /' || echo "    (ninguno: no hay decision de IA escrita)"
+  IA=$(grep -ioE 'GPTBot|OAI-SearchBot|OAI-AdsBot|ChatGPT-User|ClaudeBot|Claude-SearchBot|Claude-User|anthropic-ai|CCBot|Google-Extended|PerplexityBot|Perplexity-User|Bytespider|Applebot-Extended|meta-externalagent|Amazonbot' /tmp/si_robots.txt | sort -u)
+  if [ -n "$IA" ]; then echo "$IA" | sed 's/^/    /'; else echo "    (ninguno: no hay decision de IA escrita)"; fi
 else
   echo "robots.txt: $R  (no hay)"
 fi
