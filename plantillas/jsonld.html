@@ -144,3 +144,54 @@
   ]
 }
 </script>
+
+<!-- SOFTWAREAPPLICATION: para una app, una herramienta o una skill.
+     Obligatorios segun Google: name, offers.price (0 si es gratis) y aggregateRating O review.
+     Recomendados: operatingSystem y applicationCategory.
+     NUNCA inventes valoraciones: las resenas falsas, las incentivadas sin declarar y las
+     copiadas de otras webs estan prohibidas. Si no tienes valoraciones reales, borra el
+     bloque aggregateRating y deja el resto: pierdes la estrella, no la ficha. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "{{Nombre del producto}}",
+  "description": "{{Que hace y para quien, en una frase}}",
+  "url": "https://tudominio.com",
+  "applicationCategory": "{{MultimediaApplication, DeveloperApplication, BusinessApplication...}}",
+  "operatingSystem": "Windows 10, Windows 11",
+  "softwareVersion": "{{1.0.0}}",
+  "datePublished": "{{2026-01-01}}",
+  "downloadUrl": "https://tudominio.com/descargar",
+  "installUrl": "https://tudominio.com/descargar",
+  "fileSize": "{{25 MB}}",
+  "license": "https://opensource.org/licenses/MIT",
+  "screenshot": "https://tudominio.com/img/captura.png",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "{{Quien lo hace}}",
+    "url": "https://tudominio.com/sobre-mi"
+  }
+}
+</script>
+
+<!-- VIDEOOBJECT: si la pagina lleva un video de demostracion.
+     El texto se indexa y el video no, asi que pon tambien la transcripcion en la pagina. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "{{Titulo del video}}",
+  "description": "{{Que se ve en el video}}",
+  "thumbnailUrl": "https://tudominio.com/img/miniatura.jpg",
+  "uploadDate": "{{2026-01-01}}",
+  "duration": "PT2M30S",
+  "contentUrl": "https://tudominio.com/video/demo.mp4",
+  "embedUrl": "https://www.youtube.com/embed/{{id}}"
+}
+</script>
