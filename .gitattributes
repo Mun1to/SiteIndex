@@ -1,0 +1,4 @@
+# El barrido de la fase 0 es un script de bash y lo ejecuta gente en Linux y macOS.
+# Sin esto, un clon en Windows con core.autocrlf puede dejarlo en CRLF y entonces
+# falla con "bad interpreter: /usr/bin/env bash^M", que no se ve leyendo el archivo.
+*.sh text eol=lf
