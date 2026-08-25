@@ -33,9 +33,9 @@ New-Item -ItemType Junction -Path "$env:USERPROFILE\.claude\skills\siteindex" -T
 ## Use it
 
 Ask for it when you ship a new site, when you prepare a launch, when a site that has been live for
-weeks still does not show up, or when you want to rank and do not know where to start. Claude also
-picks it up on its own from phrases like "my site is not indexed", "review my robots.txt" or "I want
-ChatGPT to cite my page".
+weeks still does not show up, when nobody finds the app you built, or when you want to rank and do
+not know where to start. Claude also picks it up on its own from phrases like "my site is not
+indexed", "review my robots.txt" or "I want ChatGPT to cite my page".
 
 ## What it enforces
 
@@ -65,20 +65,32 @@ Google's own self-assessment questions, E-E-A-T without the mysticism, internal 
 pages, Core Web Vitals, and local business if the site serves an area. Technical work gets the
 crawler in; this is what makes it worth showing.
 
-**6. Multilingual sites get their own phase.** One URL per language (`/es/`, `/en/`), `hreflang` with
+**6. Digital products get their own phase.** Nobody searches for an invented product name on day
+one, so the homepage has to win on category and problem instead. The skill lays out the pages that
+actually bring users (use cases, comparisons, "alternative to X", pricing, download, docs,
+changelog), what an assistant needs to read before it will recommend you (platform, price, licence,
+where the data goes, how to install), `SoftwareApplication` structured data with Google's required
+fields, and the places outside your own site where people really look for software: package
+managers, alternative directories, launch platforms, GitHub topics and releases.
+
+**7. Multilingual sites get their own phase.** One URL per language (`/es/`, `/en/`), `hreflang` with
 self-reference and return links, `x-default`, and a canonical that points at itself instead of at
 another language. Above all: no automatic redirect by language or country. Googlebot sends no
 `Accept-Language` header and crawls mostly from US addresses, so a site that redirects everyone lands
 the crawler on the same version every time and the rest never get indexed.
 
-**7. AEO and GEO are SEO, and the skill says so.** Google's own May 2026 guidance is quoted: its AI
+**8. AEO and GEO are SEO, and the skill says so.** Google's own May 2026 guidance is quoted: its AI
 features run on the same ranking and quality systems, you do not need special machine-readable files
 or markup, and structured data is not a requirement for them. What does control what AI features can
 use from your page are the snippet directives, and those are documented here.
 
-**8. It ends in a measurement.** Search Console, PageSpeed, server logs, and asking the assistants
+**9. It ends in a measurement.** Search Console, PageSpeed, server logs, and asking the assistants
 your own key questions once a month, written down with a date. Not an opinion about whether it should
 rank by now.
+
+On top of the phases, the skill closes with fourteen high-yield tips (start with the queries
+already sitting on page two, revise before you publish, put the price in text, check what the bot
+sees rather than what you see) and a checklist that answers with a status, never with a plain yes.
 
 ## What is in the box
 
@@ -93,7 +105,9 @@ Templates you copy from:
 - `plantillas/multiidioma.html`, the three ways to declare `hreflang` plus a language banner that
   suggests instead of redirecting.
 - `plantillas/jsonld.html`, ready-made blocks for Organization, WebSite, Article, FAQPage,
-  BreadcrumbList and LocalBusiness.
+  BreadcrumbList, LocalBusiness, SoftwareApplication and VideoObject.
+- `plantillas/pagina-producto.md`, the skeleton of a digital-product page, block by block, with the
+  question each block answers.
 - `plantillas/sitemap.xml`, a minimal sitemap plus the index variant.
 - `plantillas/llms.txt`, with an honest note on what it is and what it is not.
 
@@ -106,6 +120,8 @@ References the agent opens only when that phase comes up:
 - `referencias/ia.md`, every AI crawler with the date it was last verified, Google's generative-AI
   guidance, the snippet controls, and how to measure citations.
 - `referencias/multiidioma.md`, the full multilingual procedure.
+- `referencias/producto-digital.md`, product pages, software structured data and the directories
+  where software is actually found.
 - `referencias/local.md`, local business and Google Business Profile.
 - `referencias/recursos.md`, where to actually learn this: official docs, free courses and the tool
   for each phase.
