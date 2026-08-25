@@ -1,7 +1,7 @@
 {
   "name": "siteindex",
   "description": "Gets a website found and ranked: starts by auditing what you already have, then robots.txt, sitemap, canonical, Open Graph, JSON-LD, the AI-crawler decision, search intent, internal links, speed and local, ending in a measurement.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": {
     "name": "Mun1to",
     "url": "https://github.com/Mun1to"

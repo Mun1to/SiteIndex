@@ -84,9 +84,14 @@ features run on the same ranking and quality systems, you do not need special ma
 or markup, and structured data is not a requirement for them. What does control what AI features can
 use from your page are the snippet directives, and those are documented here.
 
-**9. It ends in a measurement.** Search Console, PageSpeed, server logs, and asking the assistants
-your own key questions once a month, written down with a date. Not an opinion about whether it should
-rank by now.
+**9. It ends in a measurement, and it says out loud what is not over.** Search Console, PageSpeed,
+server logs, and asking the assistants your own key questions once a month, written down with a date.
+Not an opinion about whether it should rank by now. Submitting a sitemap, requesting indexing or
+changing a favicon all finish in an afternoon and take days or weeks to show, so those carry their own
+status, `EN ESPERA`, and the final report arrives in three piles instead of two: what is missing, what
+is done, and what is done but still waiting. Every waiting line carries the date it is worth reopening
+and what you expect to see by then. Where the official source publishes no timeframe, the skill says
+so instead of inventing one.
 
 On top of the phases, the skill closes with fourteen high-yield tips (start with the queries
 already sitting on page two, revise before you publish, put the price in text, check what the bot
@@ -97,8 +102,8 @@ sees rather than what you see) and a checklist that answers with a status, never
 Templates you copy from:
 
 - `plantillas/inventario.sh`, the phase 0 sweep. Reads only, changes nothing.
-- `plantillas/SEO-ESTADO.md`, the status sheet: done / missing / not applicable, plus what could not
-  be checked and who has to fix each item.
+- `plantillas/SEO-ESTADO.md`, the status sheet: done / missing / waiting / not applicable, plus what
+  could not be checked, who has to fix each item, and the date each waiting item is worth reopening.
 - `plantillas/robots.txt`, commented, with three AI postures to choose from.
 - `plantillas/head-meta.html`, the complete head: title, description, canonical, Open Graph, Twitter
   Card, hreflang.
