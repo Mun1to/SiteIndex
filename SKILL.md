@@ -57,8 +57,9 @@ en Search Console" a alguien que lleva un año usándola es ruido, y hace que se
 
 Tres consecuencias que se aplican siempre:
 
-1. **Cada punto del informe empieza por el estado real**: `YA ESTÁ`, `FALTA`, `MAL PUESTO` o
-   `NO APLICA`. Nada sale sin etiqueta.
+1. **Cada punto del informe empieza por el estado real**: `YA ESTÁ`, `FALTA`, `MAL PUESTO`,
+   `EN ESPERA` o `NO APLICA`. Nada sale sin etiqueta. `EN ESPERA` es el que se olvida: significa
+   hecho, pero el buscador todavía no lo refleja, y lleva siempre fecha de revisión (fase 12).
 2. **Lo que el barrido ya ha contestado no se pregunta.** Se enseña como hecho y se pasa al
    siguiente.
 3. **Lo que no se ha podido comprobar se dice**, con esas palabras, en vez de suponerlo. "No he
@@ -428,6 +429,28 @@ viejo en el buscador. No es un fallo del sitio: Google lo cachea aparte y su doc
 el rastreo "puede tardar de varios días a varias semanas" sin dar un plazo fijo. No hay botón para
 forzarlo, solo **Inspección de URLs y Solicitar indexación** de la portada.
 
+### Nada de esta fase se ve el mismo día
+
+Todo lo de arriba **se termina en una tarde y su efecto tarda**. Es el error de lectura más común de
+esta fase: se hace el trabajo, se mira al día siguiente, no ha cambiado nada y se concluye que está
+roto. No está roto, **está esperando**, y son dos cosas distintas que se apuntan distinto.
+
+| Lo que se acaba de hacer | Qué plazo publica la fuente oficial |
+|---|---|
+| Sitemap enviado en Search Console | **Ninguno.** Google no publica un plazo de indexación |
+| Solicitar indexación de una URL | **Ninguno.** Es una petición, no una orden, y puede no atenderse |
+| Aviso por IndexNow | **Ninguno.** El 200 significa "recibido", nunca "indexado" |
+| Favicon cambiado | Google: "de varios días a varias semanas", sin plazo fijo |
+| Contenido nuevo o reescrito | **Ninguno.** Se sabe por las impresiones, no por el calendario |
+
+⚠️ **Donde no hay plazo oficial, no se inventa uno** (regla 0). Se escribe "sin plazo oficial" y la
+fecha de revisión se elige por criterio **diciendo que es criterio**, no citándola como si fuera de
+Google.
+
+Cada una de estas líneas entra en `SEO-ESTADO.md` como **`EN ESPERA · revisar el AAAA-MM-DD`**, nunca
+como `PENDIENTE` ni como `HECHO`. `PENDIENTE` haría que alguien lo repita el mes que viene; `HECHO`
+haría que nadie compruebe si de verdad ocurrió.
+
 Plantilla: `plantillas/sitemap.xml`.
 
 ## 13. Que te encuentren y te citen las IA
@@ -478,6 +501,23 @@ Ninguna tarea anterior está terminada hasta que se ve el efecto:
 
 **Y se anota la fecha.** Un informe sin fecha no sirve para comparar dentro de dos meses, que es
 justo para lo que se hace.
+
+### El informe final va en tres montones, no en dos
+
+Un informe que solo separa "hecho" de "no hecho" miente por omisión: mete en el mismo saco lo que
+está terminado y lo que está esperando a que el buscador se entere. Se entrega siempre así:
+
+1. **LO QUE FALTA.** Nadie lo ha tocado todavía. Cada línea con su fase y con quién puede arreglarlo,
+   el agente o la persona.
+2. **LO QUE YA ESTÁ.** Hecho y visible en los datos. No se vuelve a proponer nunca.
+3. **LO QUE ESTÁ ESPERANDO.** Hecho, pero su efecto tarda. Cada línea con **la fecha en la que tiene
+   sentido volver a abrirlo** y **qué se espera ver ese día**. Sin las dos cosas la línea no sirve:
+   "revisar en septiembre" no se puede comprobar, y "revisar el 2026-09-08, deberían estar indexadas
+   más de la mitad de las 276 URLs del sitemap" sí.
+
+El tercer montón es el que convierte esto en un trabajo con continuidad en vez de una foto de un día.
+Y es lo que hay que decir de frente al cerrar, sin adornarlo: **esto no termina hoy.** Termina cuando
+el montón tres esté vacío, y eso son semanas, no una tarde.
 
 ## Enlaces entrantes: lo único que no tiene atajo
 
@@ -572,7 +612,8 @@ que cuestan, no por lo bonitas que suenan.
 
 ## Checklist
 
-Se responde con el estado (`YA ESTÁ`, `FALTA`, `MAL PUESTO`, `NO APLICA`), nunca con un sí a secas.
+Se responde con el estado (`YA ESTÁ`, `FALTA`, `MAL PUESTO`, `EN ESPERA`, `NO APLICA`), nunca con un
+sí a secas. Y si es `EN ESPERA`, con la fecha en la que se vuelve a mirar.
 
 **Fase 0, antes de nada**
 

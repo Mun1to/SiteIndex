@@ -6,7 +6,8 @@
 - **Dominio:** <https://dominio.com>
 - **Barrido:** `bash plantillas/inventario.sh dominio.com`, ejecutado el **AAAA-MM-DD**
 - **Quién ha contestado las preguntas:** <nombre>
-- **Próxima revisión:** <cuando se cumpla esta meta, no una fecha>
+- **Próxima revisión:** <la fecha más cercana de la columna `EN ESPERA` de la sección 2. Si no hay
+  ninguna, cuando se cumpla la meta que toque, no una fecha inventada>
 
 ## 1. Lo que ya está hecho
 
@@ -23,10 +24,30 @@ Esto **no se vuelve a proponer**. Si alguien lo sugiere otra vez, se le manda a 
 Ordenado por impacto, no por número de fase. Cada línea dice **quién** puede arreglarlo: el agente
 en el código, o la persona en un panel donde el agente no entra.
 
+**Los cuatro estados, y el tercero es el que más se olvida:**
+
+| Estado | Qué significa | Qué se hace con él |
+|---|---|---|
+| `PENDIENTE` | Nadie lo ha tocado todavía | Hacerlo |
+| `HACIÉNDOSE` | Empezado y sin terminar | Terminarlo |
+| `EN ESPERA · revisar el AAAA-MM-DD` | **Ya está hecho, pero su efecto tarda días o semanas** | **No se vuelve a hacer: se vuelve a mirar ese día** |
+| `HECHO` | Hecho y su efecto ya se ve en los datos | Nada, pasa a la sección 1 |
+
+⚠️ `EN ESPERA` **no es "pendiente"**. Enviar un sitemap, pedir indexación de una URL o cambiar el
+favicon se terminan en un día, pero el buscador tarda en reflejarlo. Confundir los dos estados hace
+que en la revisión siguiente alguien lo dé por roto y lo repita, o que se dé por ganado algo que
+nadie ha comprobado. Un `EN ESPERA` sin fecha de revisión es un `EN ESPERA` perdido.
+
+Y sí, aquí va una fecha aunque el resto del plan se ordene por impacto y no por calendario: **esta
+fecha no la eliges tú, la pone el ciclo de rastreo del buscador.** No es un plazo autoimpuesto, es
+cuándo tiene sentido volver a mirar.
+
 | Falta | Fase | Impacto | Lo arregla | Estado |
 |---|---|---|---|---|
-| Ejemplo: no hay `sitemap.xml` | 4 | Alto | Agente | Pendiente |
-| Ejemplo: sitemap sin enviar en Search Console | 4 | Alto | La persona | Pendiente |
+| Ejemplo: no hay `sitemap.xml` | 12 | Alto | Agente | `PENDIENTE` |
+| Ejemplo: sitemap sin enviar en Search Console | 12 | Alto | La persona | `PENDIENTE` |
+| Ejemplo: sitemap enviado el 2026-08-25, 0 de 276 URLs indexadas todavía | 12 | Alto | Nadie, el tiempo | `EN ESPERA · revisar el 2026-09-08` |
+| Ejemplo: favicon nuevo subido, Google sigue enseñando el viejo | 12 | Bajo | Nadie, el tiempo | `EN ESPERA · revisar el 2026-09-22` |
 | | | | | |
 
 ## 3. Lo que no aplica
