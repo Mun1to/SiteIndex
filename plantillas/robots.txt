@@ -16,7 +16,7 @@ Disallow: /*?orden=
 
 # ---------------------------------------------------------------------------
 # 2. Bots de IA: ELIGE UNA de las tres posturas y borra las otras dos
-#    Tokens verificados en la documentación de cada proveedor el 2026-08-14.
+#    Tokens verificados en la documentación de cada proveedor el 2026-08-25.
 # ---------------------------------------------------------------------------
 
 # --- POSTURA A: todo abierto ---------------------------------------------
@@ -38,10 +38,23 @@ Disallow: /
 User-agent: Bytespider
 Disallow: /
 
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: meta-externalagent
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
 # OJO: Google-Extended es SOLO entrenamiento de Gemini.
 # Bloquearlo NO te saca de la Búsqueda de Google ni afecta a tu posición:
 # lo dice Google por escrito en su documentación de rastreadores.
 # El que te sacaría del buscador es bloquear a Googlebot, que es otro bot distinto.
+# Y OJO con lo contrario: bloquear Google-Extended TAMPOCO te saca de las AI Overviews
+# ni del modo IA. Esos se sirven del índice normal de Búsqueda. Lo que ahí controla lo
+# que pueden usar de tu página son las etiquetas de fragmento (nosnippet, max-snippet,
+# data-nosnippet), no este archivo.
 User-agent: Google-Extended
 Disallow: /
 

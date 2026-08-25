@@ -103,3 +103,44 @@
   ]
 }
 </script>
+
+<!-- LOCALBUSINESS: solo si atiendes clientes en un sitio físico o en una zona.
+     Los datos tienen que ser LOS MISMOS que los del Perfil de Empresa de Google:
+     una dirección escrita de dos formas distintas es una señal partida en dos.
+     Elige el subtipo exacto si existe (Restaurant, Dentist, HairSalon...). -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "{{Nombre del negocio}}",
+  "image": "https://tudominio.com/img/local.jpg",
+  "url": "https://tudominio.com",
+  "telephone": "+34600000000",
+  "priceRange": "{{€€}}",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "{{Calle y número}}",
+    "addressLocality": "{{Ciudad}}",
+    "postalCode": "{{CP}}",
+    "addressCountry": "ES"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "{{00.0000}}",
+    "longitude": "{{-0.0000}}"
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "09:00",
+      "closes": "18:00"
+    }
+  ],
+  "areaServed": "{{Ciudad o provincia que atiendes}}",
+  "sameAs": [
+    "https://www.google.com/maps/place/{{tu-ficha}}",
+    "https://www.linkedin.com/company/{{tu-empresa}}"
+  ]
+}
+</script>
