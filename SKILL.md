@@ -1,24 +1,33 @@
 ---
 name: siteindex
 description: >-
-  Deja una web lista para que la encuentren los buscadores y los asistentes de IA: robots.txt que
-  no bloquea lo que importa, sitemap real, canonical, metadatos Open Graph, JSON-LD y la decisión
-  de qué bots de IA entran (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended).
-  Úsalo al publicar una web nueva o preparar su lanzamiento, al auditar el SEO técnico de un sitio
-  ya vivo, y cuando el usuario diga "no salgo en Google", "no me indexa", "quiero que ChatGPT o
-  Perplexity me citen", "revísame el robots.txt" o "ponme los metadatos". Cubre también las webs en varios
-  idiomas:
-  estructura de URL con /es/ y /en/, hreflang, y por qué redirigir automáticamente por idioma o por
-  país rompe la indexación. Termina midiendo en Search Console, no opinando.
+  Posiciona una web y la deja lista para que la encuentren los buscadores y los asistentes de IA.
+  Empieza SIEMPRE mirando lo que ya está hecho (barrido del dominio, robots, sitemap, metadatos,
+  alta en Search Console y Bing) y preguntando lo que no se puede ver, para no proponer lo que
+  ya está resuelto. Cubre robots.txt, sitemap, canonical, Open Graph, JSON-LD, la decisión de qué
+  bots de IA entran, webs en varios idiomas con /es/ y hreflang, contenido e intención de
+  búsqueda, enlaces internos, velocidad y Core Web Vitals, negocio local y la medición final.
+  Úsalo al publicar una web nueva, al preparar un lanzamiento, al auditar el SEO de un sitio vivo,
+  y cuando digan "no salgo en Google", "quiero posicionar", "no me indexa", "quiero que ChatGPT o
+  Perplexity me citen", "revísame el robots.txt" o "ponme los metadatos".
 ---
 
-# SiteIndex, dejar una web lista para que la encuentren
+# SiteIndex, posicionar una web y dejarla lista para que la encuentren
 
 ## Qué logra
 
-Que la web sea **descubrible**: que los rastreadores puedan entrar, entiendan qué es cada página,
-y que además te puedan citar los asistentes de IA. Y que al final se compruebe con datos, no con
-la sensación de que "ya debería salir".
+Que la web sea **descubrible** (que los rastreadores entren y entiendan qué es cada página),
+**merecedora** (que haya un motivo para enseñarla por encima de otra) y **medible** (que al final
+se compruebe con datos, no con la sensación de que "ya debería salir").
+
+## Cuándo NO usarla
+
+- Si el problema es que la web **no carga o da error de servidor**: eso se arregla antes, y no es
+  esta skill.
+- Si lo que se pide es **publicidad de pago**, campañas o redes sociales. Aquí no se compra
+  tráfico, se gana.
+- Si el encargo es **escribir el contenido**. Esta skill dice qué contenido hace falta y cómo se
+  estructura, no lo redacta por ti.
 
 ## Regla 0: los números se verifican, nunca se recitan
 
@@ -36,214 +45,241 @@ verificado, no se inventa.
 | Qué buscadores admiten IndexNow | indexnow.org |
 | Reglas de `hreflang` y códigos de idioma admitidos | Google Search Central, «Localized versions» |
 | Plazo de refresco del favicon en resultados de Google | developers.google.com, «Favicon in Search» |
+| Qué informes existen hoy en Search Console | La propia Search Console del usuario, abriéndola |
 
 Los user-agents son lo que más se mueve: aparecen bots nuevos cada pocos meses. Un `robots.txt`
 escrito hace un año está desactualizado por definición.
 
-## Orden de trabajo
+## Regla 1: primero se mira, después se pregunta, y nunca se propone lo que ya está hecho
 
-El orden importa: no sirve de nada pulir un título si el bot no puede entrar en la página.
+**Está prohibido recomendar nada antes de terminar la fase 0.** Un informe que dice "date de alta
+en Search Console" a alguien que lleva un año usándola es ruido, y hace que se ignore el resto.
 
-### 1. Los porteros: `robots.txt`
+Tres consecuencias que se aplican siempre:
+
+1. **Cada punto del informe empieza por el estado real**: `YA ESTÁ`, `FALTA`, `MAL PUESTO` o
+   `NO APLICA`. Nada sale sin etiqueta.
+2. **Lo que el barrido ya ha contestado no se pregunta.** Se enseña como hecho y se pasa al
+   siguiente.
+3. **Lo que no se ha podido comprobar se dice**, con esas palabras, en vez de suponerlo. "No he
+   podido ver si el sitemap está enviado en Search Console" es una respuesta válida; inventarlo, no.
+
+## Fase 0: el inventario, antes de tocar nada
+
+### 0.1 El barrido, que es automático
+
+Se lanza el barrido contra el dominio real. Mide en producción, no lee el repositorio: lo que
+importa es lo que sirve el servidor, que muchas veces no es lo que hay en el código.
+
+```bash
+bash plantillas/inventario.sh dominio.com
+```
+
+Contesta solo, sin molestar al usuario, a esto:
+
+| Lo que responde el barrido | Para qué sirve |
+|---|---|
+| Si `http`, `https`, con y sin `www` acaban todas en la misma URL | Detecta el dominio partido en dos |
+| Si hay `robots.txt`, qué bloquea y qué bots de IA nombra | Dice si la decisión de IA está tomada o no existe |
+| Si hay `sitemap.xml`, cuántas URLs lleva y si tienen `lastmod` | Dice si el sitemap es real o decorativo |
+| `<title>`, descripción, `canonical`, `h1`, `og:`, `twitter:`, `hreflang`, `html lang` | La cabecera página a página |
+| Los `@type` de JSON-LD que ya hay | Evita proponer datos estructurados que ya están |
+| Etiqueta `google-site-verification`, `msvalidate.01` y los TXT del DNS | **Dice si la web ya está dada de alta en Search Console y en Bing** |
+| Qué herramienta de analítica está instalada | Evita proponer medición que ya existe |
+| Palabras visibles en el HTML servido | Detecta el contenido que solo existe tras ejecutar JavaScript |
+| TTFB y peso del HTML | Primer aviso de lentitud, no sustituye a PageSpeed |
+
+Si el dominio todavía no existe (web sin publicar), el barrido no aplica: se salta, se dice que se
+salta, y se trabaja sobre los archivos del repositorio.
+
+### 0.2 Las preguntas, que son las que el barrido no puede contestar
+
+Se preguntan **de una vez, en un solo mensaje, máximo ocho**, y solo las que sigan en pie después
+del barrido. Preguntar algo que el barrido ya contestó es el fallo que esta fase existe para evitar.
+
+Ronda única, y se adapta a lo que haya salido:
+
+1. **¿Entras en Google Search Console y en Bing Webmaster Tools, o solo están verificadas?** El
+   barrido ve la verificación, no ve si alguien mira los informes ni si el sitemap está enviado.
+2. **¿Qué dice hoy Search Console: cuántas páginas indexadas y cuántas excluidas, y por qué motivo?**
+   Es el dato que más ahorra: convierte el trabajo entero en una lista concreta.
+3. **¿Quién es el cliente y qué escribiría en el buscador para encontrarte?** Tres o cuatro frases
+   reales, tal y como las diría una persona.
+4. **¿Qué páginas dan dinero o clientes?** Solo esas merecen trabajo fino; el resto puede esperar.
+5. **¿Hay competidores que salgan por encima?** Dos o tres nombres bastan para saber contra qué se
+   compite.
+6. **¿Se publica contenido nuevo, con qué ritmo y quién lo escribe?** Decide si la parte de
+   contenido es viable o es humo.
+7. **¿La web atiende a clientes en un sitio físico o en una zona concreta?** Si sí, entra la fase 12.
+8. **¿Qué se ha intentado ya y no funcionó?** Evita repetir lo que ya falló y da pistas del fallo.
+
+Si el usuario no sabe contestar a la 1 o la 2, no se le interroga más: se le explica en dos líneas
+cómo mirarlo y se sigue con lo que sí se puede hacer.
+
+### 0.3 La hoja de estado
+
+El resultado de la fase 0 se escribe en un archivo del proyecto, no en el chat, porque el chat se
+pierde. Plantilla: `plantillas/SEO-ESTADO.md`.
+
+Lleva tres columnas (`Ya está`, `Falta`, `No aplica`), la fecha del barrido y, en cada línea que
+falta, **quién puede arreglarlo**: el agente en el código, o el usuario en un panel donde el agente
+no entra (Search Console, Bing, perfil de empresa).
+
+De ahí sale el plan: **ordenado por impacto, no por el orden de las fases**. Primero lo que impide
+entrar, después lo que impide entender, después lo que hace que merezca la pena, y al final el pulido.
+
+## El orden de trabajo
+
+No sirve de nada pulir un título si el bot no puede entrar en la página. El orden es este, y cada
+bloque desbloquea el siguiente:
+
+| Bloque | Fases | Qué desbloquea |
+|---|---|---|
+| Que puedan entrar | 1, 2, 3 | Sin esto, lo demás no se llega a leer |
+| Que entiendan qué es cada página | 5, 6, 7, 9 | Sin esto, entran y no saben qué enseñar |
+| Que merezca la pena enseñarla | 8, 10, 12 | Sin esto, te leen y eligen a otro |
+| Que se sepa y se compruebe | 4, 11, 13 | Sin esto, nadie se entera y nadie lo sabe |
+
+## 1. Los porteros: `robots.txt`
 
 Vive en `dominio.com/robots.txt`. Antes de escribir nada, **leer el que ya hay** y comprobar qué
-está bloqueado.
+está bloqueado (el barrido ya lo trajo).
 
-- Bloquear solo lo inútil o duplicado (panel de administración, carrito, resultados del buscador
-  interno). Cada URL basura que rastrean gasta presupuesto de rastreo.
+- Bloquear solo lo inútil o duplicado: panel de administración, carrito, resultados del buscador
+  interno, y sobre todo **los filtros de catálogo**, que generan una URL por cada combinación de
+  color, talla y precio. Google recomienda cerrar esas en `robots.txt` y no con `noindex`, porque
+  el `noindex` obliga a rastrearlas igual para poder leerlo.
 - Enlazar el sitemap explícitamente con `Sitemap:`.
 - **`robots.txt` es un cartel, no un candado.** Los bots que raspan contenido se lo saltan entero.
 - **Bloquear en `robots.txt` y poner `noindex` a la vez se anula solo**: el bot nunca llega a leer
   la etiqueta. Para sacar una página del índice de verdad: dejar entrar al bot y servirle `noindex`,
   o ponerla detrás de contraseña.
+- **Nunca bloquear el CSS ni el JavaScript** que la página necesita para pintarse: Google dice que
+  necesita acceder a los mismos recursos que el navegador del visitante.
 
-Plantilla: `plantillas/robots.txt`.
+Plantilla: `plantillas/robots.txt`. Presupuesto de rastreo y sitios grandes:
+`referencias/rendimiento.md`.
 
-### 2. La decisión de IA, que es una decisión de negocio
+## 2. La decisión de IA, que es una decisión de negocio
 
 Los bots de IA no son buscadores y no hacen todos lo mismo. Hay que separarlos en dos grupos y
 **preguntar al usuario**, porque esto no lo decide el que implementa:
 
 | Grupo | Tokens | Qué pasa si lo bloqueas |
 |---|---|---|
-| **Entrenamiento** | `GPTBot`, `ClaudeBot`, `CCBot`, `Google-Extended`, `Bytespider` | Tu contenido no entrena modelos. No pierdes visibilidad. |
+| **Entrenamiento** | `GPTBot`, `ClaudeBot`, `CCBot`, `Google-Extended`, `Bytespider`, `Applebot-Extended`, `meta-externalagent`, `Amazonbot` | Tu contenido no entrena modelos. No pierdes visibilidad. |
 | **Búsqueda y respuesta** | `OAI-SearchBot`, `ChatGPT-User`, `Claude-SearchBot`, `Claude-User`, `PerplexityBot`, `Perplexity-User` | **Desapareces de las respuestas de las IA.** |
 
-Verificado en la documentación de OpenAI, Anthropic, Perplexity, Common Crawl y Google el
-**2026-08-14**. Cada proveedor tiene ya un bot de índice y otro de visita en directo, así que la
-lista crece: reverifícala antes de escribir un `robots.txt`, no la copies de aquí a ciegas.
-
-⚠️ **La trampa que se traga mucha gente:** `Google-Extended` **no afecta a tu posición ni a tu
-indexación en Google**, solo al entrenamiento de Gemini. Lo dice Google por escrito. El que te
-borra del buscador es bloquear a `Googlebot`, que es otro user-agent distinto. Confundirlos es
-autobloquearse.
-
-⚠️ **Los bots de acción del usuario no siempre obedecen.** Perplexity documenta que
-`Perplexity-User` generalmente ignora `robots.txt` porque la petición nace de una persona. Si el
-objetivo es que ese contenido no salga, `robots.txt` no es la herramienta (paso 1).
-
 La postura por defecto para quien quiere visibilidad: **bloquear entrenamiento, permitir búsqueda
-y respuesta.** Ofrecer siempre las tres posturas (todo abierto / mixta / todo cerrado) y que elija
+y respuesta.** Ofrecer siempre las tres posturas (todo abierto, mixta, todo cerrado) y que elija
 el usuario.
 
-### 3. Cimientos que no se negocian
+⚠️ **La trampa que se traga mucha gente:** `Google-Extended` **no afecta a tu posición ni a tu
+indexación en Google**, solo al entrenamiento de Gemini. El que te borra del buscador es bloquear a
+`Googlebot`, que es otro user-agent distinto. Confundirlos es autobloquearse.
+
+⚠️ **Bloquear bots de IA no te saca de las respuestas de IA de Google.** Las AI Overviews y el modo
+IA se sirven del índice normal de Búsqueda, así que ahí mandan `Googlebot` y las etiquetas de
+fragmento, no `Google-Extended`. Lo que sí las controla está en la fase 11.
+
+Los tokens exactos, quién obedece `robots.txt` y quién no, y dónde publica cada proveedor sus rangos
+de IP: `referencias/ia.md`, con la fecha de la última verificación. **Reverificar antes de escribir
+un `robots.txt`**, no copiar la tabla a ciegas.
+
+Plantilla: `plantillas/robots.txt`, con las tres posturas comentadas.
+
+## 3. Cimientos que no se negocian
 
 Si algo de esto falla, lo demás sobra:
 
 - **HTTPS en todas las páginas.**
 - **Una sola versión canónica del dominio.** O `https://dominio.com` o `https://www.dominio.com`,
-  y la otra redirige con un 301. Nunca las dos respondiendo 200.
+  y la otra redirige con un 301. Nunca las dos respondiendo 200. El barrido lo comprueba en el
+  primer bloque de su salida.
 - **Primero el móvil.** Se indexa la versión móvil: un contenido o un enlace que solo existe en
   escritorio, para el buscador no existe.
 - **404 de verdad** para lo que no existe, en vez de redirigir todo a la portada.
 - **Que el contenido esté en el HTML.** Si la página lo pinta todo con JavaScript en el cliente,
   comprobar qué ve el bot (Inspección de URLs de Search Console, pestaña de HTML renderizado).
-  Ante la duda, renderizado en servidor o pre-render.
+  Ante la duda, renderizado en servidor o pre-render. El barrido da la primera pista: si el HTML
+  servido trae cuatro palabras, el texto lo pinta el JavaScript.
+- **URLs legibles**, con palabras que una persona reconoce, agrupadas por temas en carpetas.
 - **Si la web lleva movimiento, cruza con la skill `frontlaxweb` antes de construirlo.** El
   storytelling al scroll es donde este fallo nace: los textos acaban dentro de componentes que
   solo existen cuando el JavaScript monta y el elemento entra en viewport. Un reveal debe ocultar
-  por CSS algo que YA está en el HTML, nunca decidir en JavaScript si el texto existe. Ese skill
-  lleva la contraparte escrita, con lo que cada efecto le hace al LCP, al INP y al CLS.
+  por CSS algo que YA está en el HTML, nunca decidir en JavaScript si el texto existe.
 
-### 4. Sitemap y darse de alta
+## 4. Darse de alta y avisar de los cambios
 
+- **Google Search Console.** Dos formas de dar de alta un sitio: **propiedad de dominio**, que se
+  verifica con un registro TXT del DNS y cubre todos los subdominios y los dos protocolos, o
+  **prefijo de URL**, que verifica solo esa dirección y admite archivo HTML, etiqueta, Analytics o
+  Tag Manager. Para una web propia, la de dominio es la buena. Ahí se sube el sitemap, se vigila el
+  informe de páginas y se usa Inspección de URLs al publicar o arreglar algo.
+- **Bing Webmaster Tools:** la segunda opinión, y la puerta a **IndexNow**. Importa más de lo que
+  parece: los asistentes que responden citando webs no se apoyan solo en el índice de Google.
+- **IndexNow** se monta una vez: una clave hexadecimal servida en un `.txt` en la raíz y un aviso
+  por HTTP en cada publicación. Admite hasta 10.000 URLs por envío, y un 200 significa "recibido",
+  no "indexado". **Google no participa**, así que complementa a Search Console, no la sustituye.
+  Formato exacto en `indexnow.org/documentation`.
 - **Sitemap XML** con las URLs indexables. No meter en el sitemap lo que lleva `noindex` ni lo
-  redirigido: son señales contradictorias.
-- **Google Search Console:** subir el sitemap, vigilar el informe de páginas (qué está indexado y
-  por qué no lo está el resto) y usar Inspección de URLs al publicar o arreglar algo.
-- **Bing Webmaster Tools:** la segunda opinión, y la puerta a **IndexNow** (avisas y se enteran
-  Bing y compañía sin esperar al rastreo). Google no usa IndexNow, así que complementa a Search
-  Console, no la sustituye.
+  redirigido: son señales contradictorias. Si el sitio es grande, un índice de sitemaps.
 
 ⚠️ **El favicon en los resultados va por su cuenta, aparte del resto del rastreo.** Es fácil
 comprobar que `favicon.ico` se sirve bien, está indexado y aun así Google sigue enseñando un icono
-viejo en el buscador (el típico susto: "¿por qué me sale el icono anterior si ya lo cambié?"). No es
-un fallo del sitio: Google lo cachea aparte y su propia documentación dice que el rastreo "puede
-tardar de varios días a varias semanas" sin dar un plazo fijo. No hay botón para forzarlo, solo
-**Inspección de URLs → Solicitar indexación** de la portada, que es justo lo que la documentación
-recomienda para acelerarlo. Verificado en
-`developers.google.com/search/docs/appearance/favicon-in-search` el 2026-08-18.
+viejo en el buscador. No es un fallo del sitio: Google lo cachea aparte y su documentación dice que
+el rastreo "puede tardar de varios días a varias semanas" sin dar un plazo fijo. No hay botón para
+forzarlo, solo **Inspección de URLs y Solicitar indexación** de la portada.
 
 Plantilla: `plantillas/sitemap.xml`.
 
-### 5. Página a página: la cabecera
+## 5. Página a página: la cabecera
 
 Cada página necesita, como mínimo:
 
 - **`<title>` propio**, con lo importante cerca del principio. Ni repetido entre páginas ni vacío.
 - **Meta descripción propia**, que funciona como el anuncio: no posiciona sola, pero decide el clic.
+  Google la usa como fuente del fragmento, aunque no siempre literal.
 - **Un solo `<h1>`**, y `<h2>`/`<h3>` con jerarquía real.
 - **`rel="canonical"`** apuntando a la versión buena cuando el mismo contenido es alcanzable por
-  varias URLs (parámetros, filtros, paginación).
+  varias URLs (parámetros, filtros, paginación). En una serie paginada, cada página se apunta a sí
+  misma.
 - **Open Graph** (`og:title`, `og:description`, `og:image`, `og:url`) y Twitter Card. No es SEO,
   es lo que se ve al pegar el enlace en WhatsApp, LinkedIn o Slack, y es lo primero que nota el
   usuario cuando falta.
-- **`hreflang`** solo si hay URLs separadas por idioma, y entonces con las reglas del paso 6.
+- **Texto alternativo en las imágenes**, corto y descriptivo, con la imagen colocada cerca del texto
+  que habla de ella.
+- **`hreflang`** solo si hay URLs separadas por idioma, y entonces con las reglas de la fase 6.
+
+Las etiquetas que controlan qué se puede enseñar de tu página (`max-snippet`, `nosnippet`,
+`data-nosnippet`, `max-image-preview`) valen también para las respuestas de IA de Google, y por eso
+van en la fase 11 y no aquí.
 
 Plantilla: `plantillas/head-meta.html`.
 
-### 6. Varios idiomas: la barra `/es/` y `hreflang`
+## 6. Varios idiomas: la barra `/es/` y `hreflang`
 
-Este paso aplica **solo si la web existe en más de un idioma o para más de un país**. Si es de un
-idioma solo, saltarlo entero: un `hreflang` mal puesto hace más daño que no ponerlo.
+Aplica **solo si la web existe en más de un idioma o para más de un país**. Si es de un idioma
+solo, saltar la fase entera: un `hreflang` mal puesto hace más daño que no ponerlo.
 
-#### 6.1 Primero la estructura de URL
+Lo que no se puede olvidar, en cuatro líneas:
 
-Cada idioma necesita **su propia dirección**. Lo que se ve en `dominio.com/es/precios` no es magia
-de detección: es que la versión española **es otra página**, con su URL, que se puede enlazar,
-compartir e indexar por separado. Sin eso, el buscador solo conoce una página y solo puede
-enseñarla en un idioma.
+1. **Cada idioma necesita su propia URL.** Lo que se ve en `dominio.com/es/precios` no es magia de
+   detección: es que la versión española **es otra página**. La subcarpeta es la opción por defecto;
+   el parámetro `?lang=es` Google lo marca como no recomendado.
+2. **`hreflang` con las tres reglas**: cada versión se lista a sí misma, los enlaces son de ida y
+   vuelta, y hay un `x-default` para quien no encaja en ninguna.
+3. **El `canonical` de cada idioma apunta a sí mismo.** Apuntarlo al inglés borra la versión
+   española del buscador. Es el error más caro de esta fase.
+4. **Nada de redirigir automáticamente por idioma o por país.** Googlebot no manda cabecera
+   `Accept-Language` y rastrea sobre todo desde Estados Unidos: si la web redirige a todo el mundo,
+   el bot cae siempre en la misma versión y las demás no se indexan nunca.
 
-| Estructura | Ejemplo | Cuándo usarla |
-|---|---|---|
-| **Subcarpeta** | `dominio.com/es/precios` | **La opción por defecto.** Fácil de montar, un solo dominio y toda la autoridad concentrada. |
-| Subdominio | `es.dominio.com/precios` | Cuando cada idioma vive en un servidor o lo lleva otro equipo. |
-| Dominio por país | `dominio.es` | Solo con presupuesto y equipo por país: son sitios independientes y cada uno se gana su reputación desde cero. |
-| Parámetro | `dominio.com?lang=es` | **Google lo marca como no recomendado.** No usarlo. |
+El detalle completo (estructura de URL, las tres formas de declarar `hreflang`, códigos de idioma,
+cómo se sugiere idioma sin redirigir y qué parte cubre la skill `SmartDefaults`) está en
+`referencias/multiidioma.md`. Plantilla: `plantillas/multiidioma.html`.
 
-**Idioma y país no son lo mismo.** `es` es "español"; `es-MX` es "español de México". Se separa por
-país solo si de verdad cambia algo real (precio, moneda, envío, condiciones legales). Si no cambia
-nada, un solo `/es/` para todos los hispanohablantes es una web menos que mantener.
-
-#### 6.2 `hreflang`, el mapa entre las versiones
-
-`hreflang` es lo que le dice al buscador "estas URLs son la misma página en otro idioma", para que
-enseñe la correcta a cada persona en vez de tratarlas como contenido duplicado. Tres formas
-equivalentes, según Google: etiquetas `<link>` en la cabecera, cabecera HTTP `Link` (para PDF y
-archivos que no son HTML) o anotaciones `<xhtml:link>` dentro del sitemap. Se elige **una**.
-
-Las tres reglas que lo rompen casi siempre:
-
-1. **Cada versión se lista a sí misma** además de a las demás. Una página que no se autorreferencia
-   deja el grupo cojo.
-2. **Los enlaces son de ida y vuelta.** Si `/es/` apunta a `/en/`, `/en/` tiene que apuntar a `/es/`.
-   Sin ese enlace de retorno, Google ignora la anotación entera ("missing return links" es el error
-   que más sale en Search Console).
-3. **`x-default` para quien no encaja en ninguna.** Es el valor reservado para el visitante cuyo
-   idioma no está en la lista.
-
-Códigos: idioma en ISO 639-1 y, opcional detrás, región en ISO 3166-1 Alpha 2. **Nunca región sola.**
-Google ignora inventos como `EU`, `UN` o `UK` (el del Reino Unido es `GB`).
-
-⚠️ **El error que borra un idioma del buscador:** poner el `rel="canonical"` de `/es/precios`
-apuntando a `/en/pricing`. Eso es decirle a Google que la página buena es la inglesa y que la
-española no debe indexarse. **Cada URL de idioma es canónica de sí misma**, y las demás versiones
-se declaran con `hreflang`, no con canonical.
-
-#### 6.3 La detección automática, que es donde se rompe la indexación
-
-Aquí está el punto delicado, y va con aviso de la propia documentación de Google (verificado el
-**2026-08-20**):
-
-- Googlebot **manda sus peticiones sin la cabecera `Accept-Language`**, así que no le puede decir a
-  la web en qué idioma la quiere.
-- Rastrea sobre todo desde direcciones IP de Estados Unidos, aunque ya también desde otros países.
-- Google recomienda **no redirigir automáticamente** al visitante de una versión a otra, porque
-  "esas redirecciones pueden impedir que los usuarios (y los buscadores) vean todas las versiones
-  del sitio".
-- Y avisa de que si el contenido cambia solo por cookie o por configuración del navegador en la
-  misma URL, **puede no encontrar ni rastrear todas las variantes**.
-
-Traducido: si la web redirige a todo el mundo según su idioma o su IP, el bot que llega sin idioma
-y desde Estados Unidos acaba siempre en la misma versión, y las otras nunca se indexan. La web
-funciona perfectamente para las personas y es invisible a medias para el buscador.
-
-**La forma que sí funciona:**
-
-1. **Servir siempre lo que se pide.** Si la petición es `/en/precios`, se sirve `/en/precios`,
-   aunque el navegador venga en español. Una URL de idioma explícita **no se redirige jamás**.
-2. **Detectar solo en la raíz.** La única URL donde tiene sentido mandar a un idioma u otro es
-   `dominio.com/`, que no es la versión de nadie. Y aun ahí, mejor sugerir que obligar.
-3. **Sugerir con un aviso, no con un salto.** Una franja de "esta página está en español,
-   ¿la abres?" con un enlace deja al visitante y al bot ver la página que pidieron.
-4. **Recordar la elección** en cookie o `localStorage`, y respetarla por encima de cualquier
-   detección: lo que la persona eligió a mano gana siempre.
-5. **Selector de idioma visible y con enlaces `<a href>` de verdad**, no un botón de JavaScript.
-   Ese selector es el camino por el que el rastreador descubre las demás versiones.
-
-El orden de preferencia para adivinar el idioma, de más fiable a menos: primero, lo que el visitante
-eligió antes y quedó guardado en una cookie; después, la cabecera `Accept-Language` que manda su
-navegador, que es su preferencia real declarada; y en último lugar la ubicación por IP, que es la
-peor de las tres, porque una VPN, un móvil en itinerancia o un turista la tumban, y porque estar en
-un país no dice en qué idioma se lee.
-
-La parte de cliente (arrancar en el idioma y el tema del visitante sin parpadeo y sin forzar
-redirecciones) la cubre la skill **SmartDefaults**. Aquí se decide **qué URLs existen y cómo se
-anotan**, que es lo que ve el buscador.
-
-#### 6.4 El resto de señales de idioma
-
-- **`<html lang="es">`** en cada página, con el idioma real de esa página. Lo usan los buscadores y
-  los lectores de pantalla.
-- **Traducción de verdad**, incluidos `<title>`, meta descripción, URL y textos de imagen. La misma
-  página en inglés colgada bajo `/es/` no es una versión española.
-- **Un sitemap con todas las URLs de todos los idiomas**, no solo las del principal.
-- **`og:locale`** con el idioma de la página y **`og:locale:alternate`** con los otros, para que la
-  tarjeta que se ve al pegar el enlace también salga bien.
-
-Plantilla: `plantillas/multiidioma.html`.
-
-### 7. JSON-LD, traducir la página al idioma de la máquina
+## 7. JSON-LD, traducir la página al idioma de la máquina
 
 Los datos estructurados desbloquean resultados enriquecidos y ayudan a que te entiendan como
 entidad. Tipos habituales: `Organization`, `WebSite`, `Article`, `FAQPage`, `Product`,
@@ -253,33 +289,174 @@ Reglas: que el JSON-LD **describa lo que se ve en la página** (marcar lo que no
 motivo de penalización), y pasarlo por la prueba de resultados enriquecidos antes de darlo por
 bueno.
 
+⚠️ **No lo vendas como truco de IA.** Google dice por escrito que los datos estructurados **no son
+un requisito** para salir en sus funciones de IA generativa, y que no hay un schema especial para
+eso. Sirven para los resultados enriquecidos del buscador, que ya es bastante.
+
 Plantilla: `plantillas/jsonld.html`.
 
-### 8. Que te citen las IA (AEO)
+## 8. El contenido, que es lo que de verdad posiciona
 
-- **Responder en las dos o tres primeras frases** debajo de cada encabezado, y desarrollar debajo.
-  Los modelos buscan la respuesta directa, no el rodeo.
-- **Lenguaje natural:** la pregunta entera, tal y como la haría alguien, en vez de la palabra clave
-  suelta.
-- **Formato legible por máquina:** tablas para comparar, listas para procesos, preguntas frecuentes
-  reales.
-- **Revisar el `robots.txt` antes de culpar al contenido:** si los bots de consulta están
-  bloqueados, nada de esto sirve (paso 2).
-- **`llms.txt`:** propuesta de la comunidad, **no un estándar adoptado**, y Google ha dicho
-  públicamente que no lo usa. Cuesta diez minutos y no hace daño, así que se puede poner, pero no
-  se cuenta como canal ni se vende como tal. Plantilla: `plantillas/llms.txt`.
+Lo técnico deja entrar al bot. Lo que decide si sales por encima de otro es esto. Sin esta fase,
+el resto es una casa vacía perfectamente señalizada.
 
-### 9. Medir, que es donde acaba el trabajo
+**El procedimiento, en orden:**
 
-Ninguna de las tareas anteriores está terminada hasta que se ve el efecto:
+1. **Sacar las preguntas reales**, no las palabras bonitas. Se parte de las respuestas de la fase 0,
+   del buscador interno de la web, de lo que preguntan los clientes por WhatsApp o por correo, y de
+   las sugerencias del propio buscador al escribir.
+2. **Clasificar por intención** antes de escribir una línea: saber (informativa), comparar, ir a un
+   sitio concreto (navegacional) o comprar (transaccional). La misma palabra con otra intención pide
+   otra página. Escribir un artículo para una búsqueda de compra es tirar el trabajo.
+3. **Una intención, una página.** Dos páginas peleando por lo mismo se roban entre ellas: se
+   fusionan en la buena y la otra redirige.
+4. **Mirar lo que ya sale primero** en esa búsqueda y responder a la pregunta **mejor**, no más
+   largo. Google dice que no hay un número mágico de palabras.
+5. **Responder arriba.** La respuesta en las dos o tres primeras frases y el desarrollo debajo. Sirve
+   para la persona que tiene prisa y para el asistente que busca la frase que citar.
+6. **Firmar y fechar.** Quién lo escribe, con qué experiencia, y cuándo se actualizó de verdad.
+   Cambiar solo la fecha para fingir frescura es una de las cosas que Google nombra como abuso.
+7. **Revisar lo viejo antes de escribir lo nuevo.** Actualizar la página que ya tiene impresiones
+   suele rendir más que publicar otra.
 
-- **Search Console:** páginas indexadas frente a enviadas, y los motivos de exclusión.
+**Lo que Google mira, dicho por Google:** experiencia, especialización, autoridad y confianza
+(E-E-A-T), con la confianza como la más importante. No es un factor de posicionamiento que se
+active con una etiqueta: es lo que evalúan sus sistemas y sus revisores. Las preguntas de
+autoevaluación que publica Google, la regla de "quién, cómo y por qué" y qué considera contenido
+hecho para el buscador y no para las personas están en `referencias/contenido.md`.
+
+**Contenido con IA:** se juzga el contenido, no la herramienta. Contenido asistido por IA que aporta
+algo está bien; producir páginas en masa para posicionar es **abuso de contenido a escala** y está
+en las políticas de spam, la escriba quien la escriba. Y en la UE hay que declarar el contenido
+sintético donde corresponda.
+
+## 9. Arquitectura y enlaces internos
+
+Los enlaces internos son gratis, los controlas tú entero, y casi nadie los trabaja.
+
+- **Todo lo importante, a pocos clics de la portada.** Lo que está a siete clics existe para ti y no
+  para el buscador.
+- **Cero páginas huérfanas.** Una página a la que no apunta ningún enlace interno solo se descubre
+  por el sitemap, y eso es una señal muy débil. El sitemap no sustituye a un enlace.
+- **Texto de enlace descriptivo.** "Cómo se calcula el IVA" en vez de "aquí" o "leer más": ese texto
+  le dice al buscador de qué va la página de destino.
+- **Enlaces `<a href>` de verdad**, no botones que navegan por JavaScript. Lo que no es un enlace,
+  no se rastrea.
+- **Agrupar por temas**: una página principal del tema y las específicas colgando de ella, enlazadas
+  en las dos direcciones. Así se construye autoridad sobre un tema en vez de veinte páginas sueltas.
+- **Migas de pan** visibles y con `BreadcrumbList`, que además salen en el resultado de búsqueda.
+- **Enlazar hacia fuera** cuando aporta contexto, y marcar con `nofollow` lo que no controlas o lo
+  que escriben los usuarios.
+
+Cadenas de redirecciones, paginación, filtros de catálogo y presupuesto de rastreo:
+`referencias/rendimiento.md`.
+
+## 10. Velocidad y experiencia de página
+
+Google mide la experiencia con las **Core Web Vitals**, y las mide con datos de visitantes reales,
+no con una simulación. Son tres: **LCP** (cuánto tarda en pintarse lo grande), **INP** (cuánto tarda
+en responder al tocar) y **CLS** (cuánto se mueve todo mientras carga). **Los umbrales exactos se
+miran en el momento en PageSpeed Insights**, no se recitan de memoria (regla 0).
+
+Lo que casi siempre las arregla, por orden de efecto:
+
+1. **Imágenes**: tamaño correcto, formato moderno, `width` y `height` puestos para que nada salte.
+2. **Tipografías**: precargadas y con `font-display`, o el texto aparece tarde.
+3. **JavaScript**: menos, y el que no hace falta al principio, que cargue después.
+4. **Servidor y caché**: un TTFB alto se lo come todo lo demás.
+5. **Nada que se mueva de sitio** después de cargar: avisos, banners de cookies y anuncios con su
+   espacio reservado.
+
+⚠️ La velocidad **no te saca del pozo si el contenido no responde a la búsqueda**, pero sí decide
+entre dos páginas parecidas, y decide cuánta gente se queda. Detalle en `referencias/rendimiento.md`.
+
+## 11. Que te encuentren y te citen las IA
+
+Aquí hay dos cosas distintas que se confunden todo el rato: **las funciones de IA de Google**
+(AI Overviews y modo IA) y **los asistentes que navegan** (ChatGPT, Claude, Perplexity).
+
+**Las de Google.** Google publicó su guía oficial el 15 de mayo de 2026 y es tajante: no hay un
+algoritmo aparte, sus funciones de IA se apoyan en los mismos sistemas de posicionamiento y calidad
+de la Búsqueda. De ahí salen tres consecuencias:
+
+- **Para que te citen, primero hay que estar indexado** y poder mostrar fragmento. Una página
+  bloqueada no se cita.
+- **No hace falta ningún archivo especial.** Google dice literalmente que no necesitas crear
+  archivos legibles por máquina, archivos de IA, marcado ni Markdown para aparecer.
+- **Lo que sí controla lo que pueden usar de tu página** son las etiquetas de fragmento:
+  `nosnippet`, `max-snippet`, `data-nosnippet` y `max-image-preview`. Limitar el fragmento limita
+  también lo que las AI Overviews pueden usar de tu página. Es un cuchillo de doble filo: menos
+  fragmento es menos presencia.
+
+**Los asistentes que navegan.** Ahí manda la fase 2 (que sus bots de búsqueda puedan entrar) y el
+formato del contenido: responder arriba, tablas para comparar, listas para procesos, preguntas
+frecuentes reales, y datos con su fuente. No es un truco distinto del de la fase 8: es la fase 8
+bien hecha.
+
+**`llms.txt`:** propuesta de la comunidad, **no un estándar adoptado**. Google ha dicho por escrito
+que no lo usa. Cuesta diez minutos y no hace daño, así que se puede poner, pero no se cuenta como
+canal ni se vende como tal. Plantilla: `plantillas/llms.txt`.
+
+Cómo se mide todo esto, incluido el informe de IA generativa de Search Console y el interruptor para
+quedarse fuera de las funciones de IA: `referencias/ia.md`.
+
+## 12. Negocio local, si atiende clientes en un sitio o en una zona
+
+Salta esta fase si la web no vende en una zona concreta. Si sí, es lo que más mueve la aguja, por
+encima de casi todo lo anterior.
+
+Google dice que el resultado local se decide por **relevancia, distancia y popularidad**. La
+distancia no se toca; las otras dos sí:
+
+- **Perfil de empresa de Google verificado y completo**: categoría correcta, dirección, horario de
+  verdad (festivos incluidos), teléfono, servicios, fotos.
+- **El mismo nombre, dirección y teléfono en todas partes**, empezando por la web. Las variantes
+  confunden.
+- **Reseñas, y respuestas a las reseñas.** Google dice por escrito que las reseñas positivas y las
+  respuestas útiles ayudan a destacar.
+- **Una página por servicio o por zona con contenido propio**, no la misma página con el nombre de
+  la ciudad cambiado, que es exactamente lo que Google llama páginas puerta.
+- **`LocalBusiness` en JSON-LD** con los mismos datos que el perfil.
+
+⚠️ **No se puede pagar por salir mejor en los resultados locales**, y Google lo dice con esas
+palabras. Quien lo venda, miente. Detalle en `referencias/local.md`.
+
+## 13. Medir, que es donde acaba el trabajo
+
+Ninguna tarea anterior está terminada hasta que se ve el efecto:
+
+- **Search Console:** páginas indexadas frente a enviadas y los motivos de exclusión; y en el
+  informe de rendimiento, impresiones, clics, posición media y consultas. La comparación de dos
+  periodos vale más que la foto de un día.
+- **Las consultas donde ya sales en posición baja** son la lista de trabajo más rentable que existe:
+  ya te ve el buscador, solo falta merecer más.
 - **PageSpeed Insights** para Core Web Vitals, con datos de campo si los hay.
 - **Los logs del servidor:** qué bots entran de verdad. Más fiable que cualquier panel.
 - **Las preguntas clave a los asistentes, a mano, una vez al mes:** apuntar si te citan y junto a
-  quién. Ese registro es el único informe de posiciones en IA que existe hoy.
+  quién. Ese registro sigue siendo el informe de posiciones en IA más honesto que hay.
 - **Analytics:** las visitas desde `chatgpt.com` o `perplexity.ai` son pocas y con muchísima
   intención.
+
+**Y se anota la fecha.** Un informe sin fecha no sirve para comparar dentro de dos meses, que es
+justo para lo que se hace.
+
+## Enlaces entrantes: lo único que no tiene atajo
+
+Que otros te enlacen sigue contando, y es la parte donde más dinero se pierde. Lo que hay que saber
+para no hacer daño:
+
+- **Comprar o intercambiar enlaces para posicionar es spam de enlaces** en las políticas de Google,
+  y eso incluye los intercambios excesivos y los enlaces generados en masa. El riesgo no es que no
+  funcione: es una acción manual sobre el sitio.
+- **Lo que sí funciona** es lento y aburrido: publicar algo que alguien quiera citar, aparecer donde
+  ya está tu público (medios del sector, directorios legítimos, colaboraciones, comunidades), y que
+  el nombre de la marca se mencione aunque no lleve enlace.
+- **Perseguir menciones artificiales de marca para colarse en las IA** tampoco funciona: Google lo
+  nombra como estrategia inefectiva en su propia guía de IA generativa.
+- **El sitio propio también da enlaces**: la fase 9 es la parte de esto que sí controlas al 100%.
+
+Si el usuario pide una campaña de enlaces, se le dice esto y se le ofrece lo que sí se puede hacer
+desde el código y el contenido.
 
 ## Los fallos que más veces rompen una indexación
 
@@ -297,57 +474,109 @@ Antes de tocar nada en una web que "no sale en Google", descartar estos por orde
 6. **Contenido que solo existe tras ejecutar JavaScript**, en un sitio que además tarda en pintar.
 7. **Redirección automática por idioma o por país** en un sitio multiidioma: el bot llega sin
    `Accept-Language` y desde Estados Unidos, cae siempre en la misma versión y las demás no se
-   indexan nunca (paso 6).
+   indexan nunca (fase 6).
+8. **Páginas huérfanas**: existen, están bien hechas y no las enlaza nadie desde dentro (fase 9).
+9. **Indexada pero sin motivo para salir**: el caso más común en webs correctas. No es un fallo
+   técnico, es la fase 8.
 
-## Contenido generado con IA
+## Lo que hunde una web entera
 
-Se juzga el contenido, no la herramienta: contenido asistido por IA que aporta algo está bien;
-producir páginas casi idénticas en masa para posicionar es una política de spam, la escriba quien
-la escriba. Además, en la UE el Reglamento de IA exige declarar el contenido sintético donde
-corresponda, y la etiqueta no cuesta nada al lado de una penalización.
+Las políticas de spam de Google no son consejos: se aplican con acciones manuales. Las que aparecen
+en encargos normales, sin querer:
+
+- **Contenido a escala**: muchas páginas generadas para posicionar y no para ayudar. Da igual si las
+  escribe una persona o un modelo.
+- **Páginas puerta**: la misma página repetida cambiando la ciudad o la palabra clave.
+- **Texto oculto**, relleno de palabras clave y listas de ciudades al pie.
+- **Cloaking**: enseñar al bot algo distinto de lo que ve la persona. Ojo con las "optimizaciones"
+  que detectan al bot por user-agent.
+- **Abuso de la reputación del sitio**: alquilar una sección del dominio a terceros para que
+  aprovechen tu autoridad.
+- **Afiliación fina**: fichas de producto copiadas del fabricante sin aportar nada.
+
+La lista completa y las definiciones exactas: `referencias/contenido.md`.
 
 ## Checklist
 
-- [ ] ¿`robots.txt` revisado y sin bloquear nada que deba indexarse?
+Se responde con el estado (`YA ESTÁ`, `FALTA`, `MAL PUESTO`, `NO APLICA`), nunca con un sí a secas.
+
+**Fase 0, antes de nada**
+
+- [ ] ¿Barrido lanzado contra el dominio real y su salida pegada en la hoja de estado?
+- [ ] ¿Preguntas hechas de una vez, sin preguntar nada que el barrido ya contestara?
+- [ ] ¿`SEO-ESTADO.md` escrito, con fecha y con quién arregla cada cosa?
+
+**Que puedan entrar**
+
+- [ ] ¿`robots.txt` revisado, sin bloquear nada que deba indexarse, y sin cerrar CSS ni JavaScript?
 - [ ] ¿Decisión de bots de IA tomada **por el usuario**, con los dos grupos explicados?
 - [ ] ¿Ninguna página lleva `noindex` sin querer (HTML y cabecera `X-Robots-Tag`)?
 - [ ] ¿Una sola versión canónica del dominio, con 301 desde la otra?
-- [ ] ¿Sitemap generado, sin URLs `noindex` ni redirigidas, y enlazado desde `robots.txt`?
-- [ ] ¿Sitemap subido a Search Console y a Bing Webmaster Tools?
+- [ ] ¿Contenido visible en el HTML servido, no solo tras ejecutar JavaScript?
+
+**Que entiendan qué es cada página**
+
 - [ ] ¿Cada página con `<title>` y meta descripción propios, y un solo `<h1>`?
 - [ ] ¿`rel="canonical"` correcto en las páginas con parámetros o duplicados?
 - [ ] ¿Open Graph completo y con imagen, comprobado pegando el enlace en un chat de verdad?
-- [ ] Si hay varios idiomas: ¿cada uno con su URL propia, `hreflang` con autorreferencia y enlaces
-      de vuelta, `x-default`, y ninguna redirección automática forzada?
-- [ ] Si hay varios idiomas: ¿el `canonical` de cada página apunta a sí misma y no a otro idioma?
+- [ ] Si hay varios idiomas: ¿URL propia por idioma, `hreflang` con autorreferencia y enlaces de
+      vuelta, `x-default`, canonical a sí mismo y ninguna redirección automática?
 - [ ] ¿JSON-LD validado y describiendo lo que se ve en la página?
-- [ ] ¿Contenido visible en el HTML servido, no solo tras ejecutar JS?
+- [ ] ¿Todo lo importante a pocos clics, sin páginas huérfanas y con texto de enlace descriptivo?
+
+**Que merezca la pena**
+
+- [ ] ¿Cada página responde a una intención de búsqueda concreta, y no hay dos peleando por la misma?
+- [ ] ¿La respuesta está arriba, en las primeras frases?
+- [ ] ¿Autor, experiencia y fecha real de actualización visibles?
+- [ ] ¿Core Web Vitals medidos en PageSpeed con datos de campo?
+- [ ] Si es negocio local: ¿perfil verificado y completo, datos coherentes y reseñas atendidas?
+
+**Que se sepa y se compruebe**
+
+- [ ] ¿Sitemap generado, sin URLs `noindex` ni redirigidas, y enlazado desde `robots.txt`?
+- [ ] ¿Sitemap enviado en Search Console y en Bing Webmaster Tools?
 - [ ] ¿Medido en Search Console y PageSpeed, con la fecha de la comprobación anotada?
+- [ ] ¿Fecha de la próxima revisión puesta, con lo que se espera ver?
 
 ## Lo que esta skill no cubre
 
 Se dice de frente en vez de improvisar:
 
+- **Escribir el contenido.** Dice qué hace falta y cómo se estructura; la redacción es otro encargo.
+- **Publicidad de pago.** Aquí no se compra tráfico.
 - **Reputación de correo y entregabilidad** (SPF, DKIM, DMARC, listas de bloqueo). Es otro
-  territorio, con sus propias reglas. Queda fuera del alcance, pero no hace falta dejar al
-  usuario sin nada: para mirarlo por su cuenta están Spamhaus (si el dominio o la IP están en
-  listas de spam) y MXToolbox Email Health (MX, SPF, DMARC y listas negras de un tirón, un
-  análisis gratis al día), los dos en vibeset.dev/resources.
-- **Geo SEO local** (perfil de empresa, coherencia de nombre-dirección-teléfono, reseñas).
-- **Enlaces entrantes y autoridad.** Aquí no hay atajo técnico: se gana con contenido que alguien
-  quiera enlazar.
-
-Si el usuario pregunta por alguno de los tres, decirle que queda fuera del alcance y, si hace
-falta, tratarlo aparte con fuentes verificadas en el momento.
+  territorio, con sus propias reglas. Para mirarlo por su cuenta están Spamhaus y MXToolbox Email
+  Health, los dos en vibeset.dev/resources.
+- **Auditorías de sitios enormes** (cientos de miles de URLs) con análisis de logs y rastreo
+  completo: hace falta herramienta de pago y es un encargo aparte. Lo que sí se puede hacer sin ella
+  está en `referencias/rendimiento.md`.
 
 ## Índice de recursos
 
+**Plantillas** (se copian y se adaptan):
+
+- `plantillas/inventario.sh`, el barrido de la fase 0.
+- `plantillas/SEO-ESTADO.md`, la hoja de estado con las tres columnas.
 - `plantillas/robots.txt`, comentado, con las tres posturas de IA para elegir.
 - `plantillas/head-meta.html`, la cabecera completa: title, descripción, canonical, Open Graph,
   Twitter Card y hreflang.
-- `plantillas/jsonld.html`, bloques JSON-LD listos para `Organization`, `WebSite`, `Article`,
-  `FAQPage` y `BreadcrumbList`.
-- `plantillas/multiidioma.html`, las tres formas de declarar `hreflang` (cabecera, HTTP y sitemap)
-  más el aviso que sugiere idioma sin redirigir.
+- `plantillas/jsonld.html`, bloques listos para `Organization`, `WebSite`, `Article`, `FAQPage`,
+  `LocalBusiness` y `BreadcrumbList`.
+- `plantillas/multiidioma.html`, las tres formas de declarar `hreflang` más el aviso que sugiere
+  idioma sin redirigir.
 - `plantillas/sitemap.xml`, ejemplo mínimo con índice de sitemaps.
 - `plantillas/llms.txt`, con la advertencia de qué es y qué no es.
+
+**Referencias** (se leen cuando toca esa fase, no antes):
+
+- `referencias/contenido.md`, intención de búsqueda, E-E-A-T, las preguntas de autoevaluación de
+  Google y la lista completa de políticas de spam.
+- `referencias/rendimiento.md`, Core Web Vitals, JavaScript, presupuesto de rastreo, redirecciones,
+  paginación y filtros de catálogo.
+- `referencias/ia.md`, los bots uno a uno con su fecha de verificación, la guía oficial de Google
+  para funciones de IA generativa y cómo se mide.
+- `referencias/multiidioma.md`, el detalle de la fase 6.
+- `referencias/local.md`, negocio local y perfil de empresa.
+- `referencias/recursos.md`, dónde aprender esto de verdad: documentación oficial, cursos gratuitos
+  y las herramientas que se usan en cada fase.
