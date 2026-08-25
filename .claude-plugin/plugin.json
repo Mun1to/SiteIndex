@@ -1,7 +1,7 @@
 {
   "name": "siteindex",
-  "description": "Leaves a website ready to be found: robots.txt, sitemap, canonical, Open Graph, JSON-LD and the AI-crawler decision, ending in a measurement.",
-  "version": "0.1.0",
+  "description": "Gets a website found and ranked: starts by auditing what you already have, then robots.txt, sitemap, canonical, Open Graph, JSON-LD, the AI-crawler decision, search intent, internal links, speed and local, ending in a measurement.",
+  "version": "0.2.0",
   "author": {
     "name": "Mun1to",
     "url": "https://github.com/Mun1to"
@@ -9,5 +9,18 @@
   "homepage": "https://github.com/Mun1to/SiteIndex",
   "repository": "https://github.com/Mun1to/SiteIndex",
   "license": "MIT",
-  "keywords": ["seo", "indexing", "robots-txt", "sitemap", "json-ld", "open-graph", "aeo", "web"]
+  "keywords": [
+    "seo",
+    "indexing",
+    "robots-txt",
+    "sitemap",
+    "json-ld",
+    "open-graph",
+    "aeo",
+    "geo",
+    "core-web-vitals",
+    "local-seo",
+    "search-console",
+    "web"
+  ]
 }

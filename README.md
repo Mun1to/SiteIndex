@@ -1,7 +1,8 @@
 # SiteIndex
 
-A Claude Code skill that leaves a website ready to be found: by search engines, and by the AI
-assistants people now ask instead of searching.
+A Claude Code skill that gets a website found: by search engines, and by the AI assistants people
+now ask instead of searching. It starts by looking at what you already have, so it never hands you
+a list of things you did months ago.
 
 ## Install
 
@@ -31,58 +32,90 @@ New-Item -ItemType Junction -Path "$env:USERPROFILE\.claude\skills\siteindex" -T
 
 ## Use it
 
-Ask for it when you ship a new site, when you prepare a launch, or when a site that has been live
-for weeks still does not show up. Claude also picks it up on its own from phrases like "my site is
-not indexed", "review my robots.txt" or "I want ChatGPT to cite my page".
+Ask for it when you ship a new site, when you prepare a launch, when a site that has been live for
+weeks still does not show up, or when you want to rank and do not know where to start. Claude also
+picks it up on its own from phrases like "my site is not indexed", "review my robots.txt" or "I want
+ChatGPT to cite my page".
 
 ## What it enforces
 
-**1. The gatekeepers first.** No point polishing a title if the crawler cannot get in. The skill
-walks `robots.txt`, canonical host, mobile HTML, real 404s and sitemap before it touches a single
-meta tag.
+**1. It looks before it talks.** Phase 0 runs a sweep against the live domain (`plantillas/inventario.sh`):
+redirects, robots, sitemap, head tags, JSON-LD types, analytics, rendered word count, and the DNS
+records that reveal whether the site is **already verified in Search Console and Bing**. Then it asks
+at most eight questions, and only the ones the sweep could not answer. Every line of the report
+carries its real status: already done, missing, wrong, or not applicable. No generic checklist, no
+advice you already followed.
 
-**2. The AI bot decision belongs to you, not to the agent.** Training crawlers (`GPTBot`,
-`ClaudeBot`, `CCBot`, `Google-Extended`, `Bytespider`) and live-answer crawlers (`OAI-SearchBot`,
-`ChatGPT-User`, `Claude-SearchBot`, `Claude-User`, `PerplexityBot`, `Perplexity-User`) are two
-different groups with two different consequences. Block the first and you
-lose nothing visible; block the second and you disappear from AI answers. And the classic trap:
-`Google-Extended` has no effect on your Google Search ranking or indexing, which is not what most
-robots files out there assume.
+**2. The gatekeepers first.** No point polishing a title if the crawler cannot get in. The skill
+walks `robots.txt`, canonical host, mobile HTML, real 404s and sitemap before it touches a meta tag.
 
-**3. Numbers are verified, never recited.** Title lengths, Core Web Vitals thresholds, bot names
-and structured-data requirements all expire. The skill carries the procedure and a table of where
-to check each number at the moment of use, so it does not quote a stale figure with confidence.
+**3. The AI bot decision belongs to you, not to the agent.** Training crawlers (`GPTBot`, `ClaudeBot`,
+`CCBot`, `Google-Extended`, `Bytespider`) and live-answer crawlers (`OAI-SearchBot`, `ChatGPT-User`,
+`Claude-SearchBot`, `Claude-User`, `PerplexityBot`, `Perplexity-User`) are two different groups with
+two different consequences. Block the first and you lose nothing visible; block the second and you
+disappear from AI answers. And the classic trap: `Google-Extended` has no effect on your Google
+Search ranking, which is not what most robots files out there assume.
 
-**4. Multilingual sites get their own step.** One URL per language (`/es/`, `/en/`), `hreflang`
-with self-reference and return links, `x-default`, and a canonical that points at itself instead of
-at another language. Above all: no automatic redirect by language or country. Googlebot sends no
-`Accept-Language` header and crawls mostly from US addresses, so a site that redirects everyone
-lands the crawler on the same version every time and the rest never get indexed. Detect, suggest,
-let the person choose.
+**4. Numbers are verified, never recited.** Title lengths, Core Web Vitals thresholds, bot names and
+structured-data requirements all expire. The skill carries the procedure and a table of where to
+check each number at the moment of use, so it never quotes a stale figure with confidence.
 
-**5. It ends in a measurement.** Search Console, PageSpeed, server logs, and asking the assistants
-your own key questions once a month. Not an opinion about whether it should rank by now.
+**5. It covers the half that actually ranks.** Search intent before writing, one intent per page,
+Google's own self-assessment questions, E-E-A-T without the mysticism, internal links and orphan
+pages, Core Web Vitals, and local business if the site serves an area. Technical work gets the
+crawler in; this is what makes it worth showing.
+
+**6. Multilingual sites get their own phase.** One URL per language (`/es/`, `/en/`), `hreflang` with
+self-reference and return links, `x-default`, and a canonical that points at itself instead of at
+another language. Above all: no automatic redirect by language or country. Googlebot sends no
+`Accept-Language` header and crawls mostly from US addresses, so a site that redirects everyone lands
+the crawler on the same version every time and the rest never get indexed.
+
+**7. AEO and GEO are SEO, and the skill says so.** Google's own May 2026 guidance is quoted: its AI
+features run on the same ranking and quality systems, you do not need special machine-readable files
+or markup, and structured data is not a requirement for them. What does control what AI features can
+use from your page are the snippet directives, and those are documented here.
+
+**8. It ends in a measurement.** Search Console, PageSpeed, server logs, and asking the assistants
+your own key questions once a month, written down with a date. Not an opinion about whether it should
+rank by now.
 
 ## What is in the box
 
-- `SKILL.md`, the full procedure in nine steps, the seven failures that break indexing most often,
-  and a checklist.
+Templates you copy from:
+
+- `plantillas/inventario.sh`, the phase 0 sweep. Reads only, changes nothing.
+- `plantillas/SEO-ESTADO.md`, the status sheet: done / missing / not applicable, plus what could not
+  be checked and who has to fix each item.
 - `plantillas/robots.txt`, commented, with three AI postures to choose from.
-- `plantillas/head-meta.html`, the complete head: title, description, canonical, Open Graph,
-  Twitter Card, hreflang.
-- `plantillas/multiidioma.html`, the three ways to declare `hreflang` (head, HTTP header, sitemap)
-  plus a language banner that suggests instead of redirecting.
-- `plantillas/jsonld.html`, ready-made blocks for Organization, WebSite, Article, FAQPage and
-  BreadcrumbList.
+- `plantillas/head-meta.html`, the complete head: title, description, canonical, Open Graph, Twitter
+  Card, hreflang.
+- `plantillas/multiidioma.html`, the three ways to declare `hreflang` plus a language banner that
+  suggests instead of redirecting.
+- `plantillas/jsonld.html`, ready-made blocks for Organization, WebSite, Article, FAQPage,
+  BreadcrumbList and LocalBusiness.
 - `plantillas/sitemap.xml`, a minimal sitemap plus the index variant.
 - `plantillas/llms.txt`, with an honest note on what it is and what it is not.
+
+References the agent opens only when that phase comes up:
+
+- `referencias/contenido.md`, search intent, E-E-A-T, Google's self-assessment questions and the full
+  spam-policy list.
+- `referencias/rendimiento.md`, Core Web Vitals, JavaScript rendering, crawl budget, redirects,
+  pagination and faceted navigation.
+- `referencias/ia.md`, every AI crawler with the date it was last verified, Google's generative-AI
+  guidance, the snippet controls, and how to measure citations.
+- `referencias/multiidioma.md`, the full multilingual procedure.
+- `referencias/local.md`, local business and Google Business Profile.
+- `referencias/recursos.md`, where to actually learn this: official docs, free courses and the tool
+  for each phase.
 
 The skill is written in Spanish; it works the same when you talk to your agent in English.
 
 ## What it does not cover
 
-Email deliverability (SPF, DKIM, DMARC), local Geo SEO, and link building. Different territories
-with different rules, and the skill says so instead of improvising.
+Writing the content itself, paid advertising, email deliverability (SPF, DKIM, DMARC), and full
+crawls of very large sites, which need a paid crawler. The skill says so instead of improvising.
 
 ## Don't trust it, check it
 
@@ -98,7 +131,8 @@ whatever you use. It is the same prompt in every public repository here, so you 
 > te dirá en tu idioma qué hace este programa de verdad: qué envía por internet, qué toca en tu
 > ordenador y qué ejecuta al instalarse.
 
-There is nothing here that runs: Markdown instructions and reference files you copy from.
+The only executable file here is `plantillas/inventario.sh`, and it only reads: `curl` against your
+own domain and a DNS lookup. Everything else is Markdown and reference files you copy from.
 
 ## License
 
