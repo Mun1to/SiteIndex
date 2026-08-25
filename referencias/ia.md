@@ -13,7 +13,7 @@ es la de la última comprobación real, no la de "cuando se escribió esto".
 | `GPTBot` | OpenAI | Entrenamiento de modelos | Sí | 2026-08-25 | `developers.openai.com/api/docs/bots` |
 | `OAI-SearchBot` | OpenAI | Índice de búsqueda de ChatGPT | Sí | 2026-08-25 | igual |
 | `ChatGPT-User` | OpenAI | Visita en directo pedida por una persona | **Puede no aplicarle** | 2026-08-25 | igual |
-| `OAI-AdsBot` | OpenAI | Comprobar páginas de destino de anuncios. No entrena modelos | Sí | 2026-08-25 | igual |
+| `OAI-AdsBot` | OpenAI | Comprobar páginas de destino de anuncios. No entrena modelos | **Su documentación no lo dice** | 2026-08-25 | igual |
 | `ClaudeBot` | Anthropic | Entrenamiento | Sí | 2026-08-25 | `support.claude.com`, artículo de rastreo |
 | `Claude-SearchBot` | Anthropic | Mejorar los resultados de búsqueda | Sí | 2026-08-25 | igual |
 | `Claude-User` | Anthropic | Visita pedida por una persona en Claude | Sí | 2026-08-25 | igual |
@@ -25,7 +25,7 @@ es la de la última comprobación real, no la de "cuando se escribió esto".
 | `Google-CloudVertexBot` | Google | Para quien construye agentes con Vertex AI | Sí | 2026-08-25 | igual |
 | `CCBot` | Common Crawl | Archivo público que luego usan muchos modelos | Sí | 2026-08-14 | `commoncrawl.org/ccbot` |
 | `Bytespider` | ByteDance | Entrenamiento | Declarado | 2026-08-14 | Documentación de ByteDance |
-| `Applebot-Extended` | Apple | Excluir del entrenamiento sin salir de Siri ni Spotlight | Sí | 2026-08-14 | Soporte de Apple |
+| `Applebot-Extended` | Apple | Excluir del entrenamiento sin salir de Siri ni Spotlight | Sí | 2026-08-25 | `support.apple.com/en-us/119829` |
 | `meta-externalagent` | Meta | Entrenamiento | Sí | 2026-08-14 | Documentación de Meta |
 | `Amazonbot` | Amazon | Índice de Alexa y servicios propios | Sí | 2026-08-14 | Documentación de Amazon |
 
@@ -35,7 +35,7 @@ poniéndose su nombre):
 - OpenAI: `openai.com/gptbot.json`, `openai.com/searchbot.json`, `openai.com/chatgpt-user.json`,
   `openai.com/adsbot.json`.
 - Anthropic: `claude.com/crawling/bots.json`.
-- Perplexity: `perplexity.com/perplexitybot.json`, `perplexity.com/perplexity-user.json`.
+- Perplexity: `www.perplexity.com/perplexitybot.json`, `www.perplexity.com/perplexity-user.json`.
 - Google: se comprueba por DNS inverso, no por lista.
 
 Bloquear por IP es mala idea: si el bot no puede leer tu `robots.txt`, tampoco puede obedecerlo.

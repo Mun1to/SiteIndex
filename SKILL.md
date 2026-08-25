@@ -38,11 +38,11 @@ verificado, no se inventa.
 
 | Lo que caduca | Dónde se comprueba |
 |---|---|
-| Longitud recomendada de `<title>` y meta descripción | Google Search Central, documentación de fragmentos |
+| Qué dice Google del largo de `<title>` y meta descripción. Hoy (2026-08-25) **no publica ninguna cifra**: dice que el título se recorta al ancho del dispositivo. Toda cifra que circula es de un tercero | Google Search Central, «Title links» y documentación de fragmentos |
 | Umbrales de Core Web Vitals (LCP, INP, CLS) | web.dev y PageSpeed Insights |
 | Nombres y user-agents de los bots de IA | La página de cada proveedor (OpenAI, Anthropic, Perplexity, Google) |
 | Tipos y campos obligatorios de datos estructurados | Galería de resultados enriquecidos de Google Search Central |
-| Qué buscadores admiten IndexNow | indexnow.org |
+| Qué buscadores admiten IndexNow | `indexnow.org/searchengines.json`, que es la lista viva |
 | Reglas de `hreflang` y códigos de idioma admitidos | Google Search Central, «Localized versions» |
 | Plazo de refresco del favicon en resultados de Google | developers.google.com, «Favicon in Search» |
 | Qué informes existen hoy en Search Console | La propia Search Console del usuario, abriéndola |
