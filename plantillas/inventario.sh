@@ -38,7 +38,10 @@ if [ "$R" = "200" ]; then
   echo "  linea Sitemap    : $(grep -i '^[[:space:]]*Sitemap:' /tmp/si_robots.txt | sed 's/^[[:space:]]*//' | tr '\n' ' ')"
   echo "  bots de IA nombrados:"
   IA=$(grep -ioE 'GPTBot|OAI-SearchBot|OAI-AdsBot|ChatGPT-User|ClaudeBot|Claude-SearchBot|Claude-User|anthropic-ai|CCBot|Google-Extended|GoogleOther|Google-CloudVertexBot|PerplexityBot|Perplexity-User|Bytespider|Applebot-Extended|meta-externalagent|meta-externalfetcher|meta-webindexer|meta-externalads|Amazonbot|Amzn-SearchBot|Amzn-User' /tmp/si_robots.txt | sort -u)
-  if [ -n "$IA" ]; then echo "$IA" | sed 's/^/    /'; else echo "    (ninguno: no hay decision de IA escrita)"; fi
+  NOTA_IA=$(grep -E '^[[:space:]]*#.*\b(AI|IA)\b' /tmp/si_robots.txt | head -3)
+  if [ -n "$IA" ]; then echo "$IA" | sed 's/^/    /'
+  elif [ -n "$NOTA_IA" ]; then echo "    (ninguno por su nombre, pero la decision esta escrita en un comentario:)"; echo "$NOTA_IA" | sed 's/^/    /'
+  else echo "    (ninguno: no hay decision de IA escrita)"; fi
 else
   echo "robots.txt: $R  (no hay)"
 fi
