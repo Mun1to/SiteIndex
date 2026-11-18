@@ -101,6 +101,14 @@ is done, and what is done but still waiting. Every waiting line carries the date
 and what you expect to see by then. Where the official source publishes no timeframe, the skill says
 so instead of inventing one.
 
+**10. It tells you how to keep the site healthy afterwards.** A short routine by trigger, not by
+calendar: what to check every time you publish (live status, sitemap, the notification actually sent,
+the sitemap actually read again), what to look at once a month (indexed against submitted pages, the
+last-read date of each sitemap in both consoles, mobile speed of the pages that bring customers), and
+what to reread every quarter (facts about third parties in comparison pages, the AI crawler list,
+broken links). It also says what does not count as maintenance: changing a date without changing the
+content, or requesting indexing of the same page every week.
+
 On top of the phases, the skill closes with fourteen high-yield tips (start with the queries
 already sitting on page two, revise before you publish, put the price in text, check what the bot
 sees rather than what you see) and a checklist that answers with a status, never with a plain yes.

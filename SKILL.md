@@ -6,10 +6,10 @@ description: >-
   Console y Bing, y solo pregunta lo que no puede comprobar. Cubre robots.txt, sitemap, canonical,
   Open Graph, JSON-LD, qué bots de IA entran, webs en varios idiomas con /es/ y hreflang, contenido
   e intención de búsqueda, enlaces internos, velocidad, negocio local, la página de un producto
-  digital (app, herramienta o skill) y la medición final. Úsalo al publicar una web, al preparar un
-  lanzamiento, al auditar el SEO de un sitio vivo, y cuando digan "no salgo en Google", "quiero
-  posicionar", "no me indexa", "nadie descarga mi app", "quiero que ChatGPT o Perplexity me citen"
-  o "revísame el robots.txt".
+  digital (app, herramienta o skill), la medición final y la rutina para mantenerlo después. Úsalo
+  al publicar una web, al preparar un lanzamiento, al auditar el SEO de un sitio vivo, y cuando
+  digan "no salgo en Google", "quiero posicionar", "no me indexa", "nadie descarga mi app", "quiero
+  que ChatGPT o Perplexity me citen", "cómo mantengo el SEO" o "revísame el robots.txt".
 ---
 
 # SiteIndex, posicionar una web y dejarla lista para que la encuentren
@@ -295,6 +295,12 @@ bueno.
 un requisito** para salir en sus funciones de IA generativa, y que no hay un schema especial para
 eso. Sirven para los resultados enriquecidos del buscador, que ya es bastante.
 
+**Válido no es lo mismo que mostrado.** La prueba de resultados enriquecidos dice qué elementos
+cuenta Google en esa página, y puede no contar un marcado que está bien escrito (medido el
+2026-11-19: una página con `FAQPage` válido y dieciséis preguntas solo contó la organización). Qué
+tipos enseña hoy lo dice la galería de resultados enriquecidos (regla 0); el marcado se deja igual,
+porque lo leen otros buscadores y los asistentes.
+
 Plantilla: `plantillas/jsonld.html`.
 
 ## 7. Arquitectura y enlaces internos
@@ -342,6 +348,16 @@ el resto es una casa vacía perfectamente señalizada.
 7. **Revisar lo viejo antes de escribir lo nuevo.** Actualizar la página que ya tiene impresiones
    suele rendir más que publicar otra.
 
+**Cómo se sabe qué se busca de verdad, sin pagar.** Google solo da cifras de búsquedas dentro de su
+planificador de anuncios, que pide cuenta de Google Ads. Bing Webmaster Tools las da en «Keyword
+Research» a cualquier cuenta con una web dada de alta. Son impresiones de Bing, así que sirven para
+**comparar unas búsquedas con otras**, nunca como total. Se mide **antes** de decidir qué páginas se
+hacen. Lo que suele salir (medido el 2026-11-18 en cinco productos): casi nadie busca la categoría
+con las palabras del producto; se busca **el problema** («grabar pantalla», «transcribir audio a
+texto») o **el nombre de otra herramienta**. Por eso las páginas que traen gente nueva van por
+problema y por «alternativa a», y los clics que llegan escribiendo la marca no dicen nada de la
+visibilidad: esa gente ya te conocía.
+
 **Lo que Google mira, dicho por Google:** experiencia, especialización, autoridad y confianza
 (E-E-A-T), con la confianza como la más importante. No es un factor de posicionamiento que se
 active con una etiqueta: es lo que evalúan sus sistemas y sus revisores. Las preguntas de
@@ -370,6 +386,11 @@ mucho: **documentación indexable** y **changelog con fechas reales**.
 ⚠️ Generar cien páginas "alternativa a" desde una plantilla, cambiando solo el nombre, es abuso de
 contenido a escala y páginas puerta a la vez. Si no tienes nada real que decir de ese competidor, no
 hagas esa página.
+
+Y aunque haya algo real que decir, **se mide cuánto se parecen entre sí** las páginas que salen de la
+misma plantilla: si la mitad de las líneas son iguales, Google puede indexar solo algunas. Cada una
+lleva su parte propia (en qué gana el otro, para quién es mejor el otro, de dónde sale cada dato y con
+qué fecha), y tras publicar se mira en Search Console cuáles se quedan en «rastreada, sin indexar».
 
 **Lo que un asistente necesita leer para recomendarte** (si falta, te descarta sin avisar): qué es y
 qué problema resuelve en la primera frase, en qué sistema funciona, cuánto cuesta (incluido "gratis"
@@ -541,6 +562,54 @@ El tercer montón es el que convierte esto en un trabajo con continuidad en vez 
 Y es lo que hay que decir de frente al cerrar, sin adornarlo: **esto no termina hoy.** Termina cuando
 el montón tres esté vacío, y eso son semanas, no una tarde.
 
+## Mantener el sitio: lo que se repite
+
+Posicionar no es una obra que se entrega, es una rutina corta que se repite. Va por disparador y no
+por calendario, porque lo que se revisa «cuando toque» no se revisa nunca.
+
+**Cada vez que se publica algo** (una página nueva o un cambio que importa):
+
+1. **Comprobar que está en la calle**: `curl -I` a la dirección real y un 200. Lo que pasa en local
+   no cuenta.
+2. **Que entra en el sitemap publicado con su `lastmod` real**, y que el número de URLs del sitemap
+   es el que se esperaba.
+3. **Que el aviso salió**: si hay IndexNow, mirar la respuesta en el registro del despliegue. Un paso
+   de aviso que falla en silencio es lo normal, no la excepción.
+4. **Que el sitemap se ha vuelto a leer**: en Search Console y en Bing, la fecha de última lectura.
+   Si no se mueve, se reenvía el mismo sitemap desde el panel, sin cambiarle el nombre.
+5. **Inspección de URLs solo para lo importante**: tiene cupo y es una petición, no una orden. Lo
+   demás lo traen el sitemap y los enlaces internos.
+6. **Apuntarlo en `SEO-ESTADO.md` como `EN ESPERA`**, con la fecha en la que se vuelve a mirar y lo
+   que se espera ver ese día.
+
+**Una vez al mes** (la fecha del montón tres):
+
+- **Páginas indexadas frente a enviadas**, y el motivo de las que no. Las «rastreadas, sin indexar»
+  piden contenido propio, no otra petición de indexación.
+- **La fecha de última lectura de cada sitemap, en los dos paneles.** Un sitemap enviado y con estado
+  «correcto» puede llevar meses sin leerse (medido el 2026-11-18: tres webs con el sitemap de Bing sin
+  leer desde hacía entre tres y cinco meses; se arregló reenviándolo).
+- **Las consultas donde ya se sale en posición baja**: la lista de trabajo del mes sale de ahí.
+- **PageSpeed en móvil de las páginas que dan clientes.** Una dependencia nueva o un efecto de portada
+  hunde la nota sin que nadie haya tocado el SEO.
+- **Las mismas preguntas a los asistentes**, con la fecha.
+
+**Cada tres meses, o cuando cambia algo de fuera:**
+
+- **Los datos sobre terceros** (precio, licencia o plataformas de una comparativa o de una
+  «alternativa a»): se releen en su fuente oficial y se cambia la fecha de comprobación que se ve en
+  la página. Un dato caducado sobre un competidor es peor que no tener la página.
+- **Los bots de IA del `robots.txt`**, contra la página de cada proveedor (regla 0).
+- **Enlaces rotos, redirecciones en cadena y páginas huérfanas**: los saca el repaso página a página
+  de la fase 0.
+- **Las capturas y las cifras del propio producto** que salen en las páginas: versión, peso, precio.
+
+**Antes y después de un cambio de estructura** (dominio, direcciones, un idioma nuevo, otro
+framework): el barrido entero de la fase 0, las dos veces, y se comparan las dos salidas.
+
+**Lo que NO es mantenimiento:** cambiar la fecha sin cambiar el contenido, pedir la indexación de lo
+mismo cada semana, o publicar páginas nuevas para «dar señales de actividad». Las tres cosas restan.
+
 ## Enlaces entrantes: lo único que no tiene atajo
 
 Que otros te enlacen sigue contando, y es la parte donde más dinero se pierde. Lo que hay que saber
@@ -573,6 +642,10 @@ Antes de tocar nada en una web que "no sale en Google", descartar estos por orde
 5. **Canonical apuntando a otra página** (típico de plantillas copiadas): le estás diciendo al
    buscador que esa página no es la buena.
 6. **Contenido que solo existe tras ejecutar JavaScript**, en un sitio que además tarda en pintar.
+   La trampa: una web hecha solo con JavaScript puede llevar `<title>`, descripción y JSON-LD en el
+   HTML y servir el cuerpo vacío (`<div id="root"></div>`). Para Bing y para los robots de las IA esa
+   página tiene cero palabras. Se ve contando las palabras del cuerpo con `curl`, no mirando la
+   cabecera.
 7. **Redirección automática por idioma o por país** en un sitio multiidioma: el bot llega sin
    `Accept-Language` y desde Estados Unidos, cae siempre en la misma versión y las demás no se
    indexan nunca (fase 5).
@@ -628,7 +701,7 @@ que cuestan, no por lo bonitas que suenan.
 12. **Si tiene vídeo, pon la transcripción.** El texto se indexa, el vídeo no. Y de paso la página
     responde a preguntas que el vídeo contesta hablando.
 13. **Repite las mismas mediciones cada mes, con fecha.** Un número suelto no dice nada; dos números
-    con un mes de diferencia dicen si el trabajo sirvió.
+    con un mes de diferencia dicen si el trabajo sirvió. La rutina entera, en «Mantener el sitio».
 14. **No toques cinco cosas a la vez si quieres saber cuál funcionó.** En una web pequeña, un cambio
     grande por vez es lo único que se puede atribuir.
 
@@ -680,6 +753,13 @@ sí a secas. Y si es `EN ESPERA`, con la fecha en la que se vuelve a mirar.
 - [ ] ¿Sitemap enviado en Search Console y en Bing Webmaster Tools?
 - [ ] ¿Medido en Search Console y PageSpeed, con la fecha de la comprobación anotada?
 - [ ] ¿Fecha de la próxima revisión puesta, con lo que se espera ver?
+
+**Cada vez que se publica, y cada mes**
+
+- [ ] Tras publicar: ¿200 en la dirección real, dentro del sitemap, aviso enviado y apuntado como
+      `EN ESPERA`?
+- [ ] ¿La última lectura del sitemap es reciente en Search Console y en Bing, o se ha reenviado?
+- [ ] ¿Los datos sobre terceros llevan su fecha de comprobación, y no ha caducado?
 
 ## Lo que esta skill no cubre
 
