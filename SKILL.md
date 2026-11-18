@@ -38,7 +38,7 @@ verificado, no se inventa.
 
 | Lo que caduca | Dónde se comprueba |
 |---|---|
-| Qué dice Google del largo de `<title>` y meta descripción. Hoy (2026-08-25) **no publica ninguna cifra**: dice que el título se recorta al ancho del dispositivo. Toda cifra que circula es de un tercero | Google Search Central, «Title links» y documentación de fragmentos |
+| Qué dice Google del largo de `<title>` y meta descripción. Hoy (2026-11-18) **no publica ninguna cifra**: dice que el título se recorta al ancho del dispositivo. Toda cifra que circula es de un tercero | Google Search Central, «Title links» y documentación de fragmentos |
 | Umbrales de Core Web Vitals (LCP, INP, CLS) | web.dev y PageSpeed Insights |
 | Nombres y user-agents de los bots de IA | La página de cada proveedor (OpenAI, Anthropic, Perplexity, Google) |
 | Tipos y campos obligatorios de datos estructurados | Galería de resultados enriquecidos de Google Search Central |
@@ -172,14 +172,15 @@ Los bots de IA no son buscadores y no hacen todos lo mismo. Hay que separarlos e
 | Grupo | Tokens | Qué pasa si lo bloqueas |
 |---|---|---|
 | **Entrenamiento** | `GPTBot`, `ClaudeBot`, `CCBot`, `Google-Extended`, `Bytespider`, `Applebot-Extended`, `meta-externalagent`, `Amazonbot` | Tu contenido no entrena modelos. No pierdes visibilidad. |
-| **Búsqueda y respuesta** | `OAI-SearchBot`, `ChatGPT-User`, `Claude-SearchBot`, `Claude-User`, `PerplexityBot`, `Perplexity-User` | **Desapareces de las respuestas de las IA.** |
+| **Búsqueda y respuesta** | `OAI-SearchBot`, `ChatGPT-User`, `Claude-SearchBot`, `Claude-User`, `PerplexityBot`, `Perplexity-User`, `meta-webindexer`, `meta-externalfetcher`, `Amzn-SearchBot`, `Amzn-User` | **Desapareces de las respuestas de las IA.** |
 
 La postura por defecto para quien quiere visibilidad: **bloquear entrenamiento, permitir búsqueda
 y respuesta.** Ofrecer siempre las tres posturas (todo abierto, mixta, todo cerrado) y que elija
 el usuario.
 
 ⚠️ **La trampa que se traga mucha gente:** `Google-Extended` **no afecta a tu posición ni a tu
-indexación en Google**, solo al entrenamiento de Gemini. El que te borra del buscador es bloquear a
+indexación en Google**, solo a si lo rastreado sirve para entrenar Gemini y para el grounding en las
+apps de Gemini y en Vertex AI. El que te borra del buscador es bloquear a
 `Googlebot`, que es otro user-agent distinto. Confundirlos es autobloquearse.
 
 ⚠️ **Bloquear bots de IA no te saca de las respuestas de IA de Google.** Las AI Overviews y el modo

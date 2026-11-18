@@ -16,7 +16,7 @@ Disallow: /*?orden=
 
 # ---------------------------------------------------------------------------
 # 2. Bots de IA: ELIGE UNA de las tres posturas y borra las otras dos
-#    Tokens verificados en la documentación de cada proveedor el 2026-08-25.
+#    Tokens verificados en la documentación de cada proveedor el 2026-11-18.
 # ---------------------------------------------------------------------------
 
 # --- POSTURA A: todo abierto ---------------------------------------------
@@ -47,7 +47,8 @@ Disallow: /
 User-agent: Amazonbot
 Disallow: /
 
-# OJO: Google-Extended es SOLO entrenamiento de Gemini.
+# OJO: Google-Extended no es un rastreador, es un token de control: decide si lo rastreado
+# sirve para entrenar futuros modelos Gemini y para el grounding en las apps de Gemini y Vertex AI.
 # Bloquearlo NO te saca de la Búsqueda de Google ni afecta a tu posición:
 # lo dice Google por escrito en su documentación de rastreadores.
 # El que te sacaría del buscador es bloquear a Googlebot, que es otro bot distinto.
@@ -65,9 +66,13 @@ Disallow: /
 # Claude-User       -> visita en directo cuando alguien le pregunta a Claude
 # PerplexityBot     -> el índice de respuestas de Perplexity
 # Perplexity-User   -> visita en directo desde una pregunta de un usuario
+# meta-webindexer   -> los resultados de búsqueda de Meta AI
+# meta-externalfetcher -> visita en directo pedida por una persona en Meta AI
+# Amzn-SearchBot    -> la búsqueda de Alexa y otros productos de Amazon
+# Amzn-User         -> visita en directo por una acción de un usuario de Amazon
 
 # --- POSTURA C: todo cerrado a la IA -------------------------------------
-# Añade a la postura B estas seis, sabiendo que desapareces de las respuestas de IA:
+# Añade a la postura B estas diez, sabiendo que desapareces de las respuestas de IA:
 # User-agent: OAI-SearchBot
 # Disallow: /
 #
@@ -86,9 +91,22 @@ Disallow: /
 # User-agent: Perplexity-User
 # Disallow: /
 #
+# User-agent: meta-webindexer
+# Disallow: /
+#
+# User-agent: meta-externalfetcher
+# Disallow: /
+#
+# User-agent: Amzn-SearchBot
+# Disallow: /
+#
+# User-agent: Amzn-User
+# Disallow: /
+#
 # Aviso: los bots que actúan por una acción del usuario no siempre obedecen.
 # Perplexity documenta que Perplexity-User "generalmente ignora las reglas de
-# robots.txt" porque la petición nace de una persona, no de un rastreo.
+# robots.txt" porque la petición nace de una persona, no de un rastreo. Meta y
+# Amazon avisan de lo mismo con meta-externalfetcher y Amzn-User.
 
 # --- Extra que casi nadie conoce -----------------------------------------
 # OAI-AdsBot: valida las páginas que se envían como anuncios en ChatGPT y NO

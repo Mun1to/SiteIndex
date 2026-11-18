@@ -10,24 +10,31 @@ es la de la última comprobación real, no la de "cuando se escribió esto".
 
 | User-agent | Quién | Para qué | ¿Obedece `robots.txt`? | Verificado | Dónde se comprueba |
 |---|---|---|---|---|---|
-| `GPTBot` | OpenAI | Entrenamiento de modelos | Sí | 2026-08-25 | `developers.openai.com/api/docs/bots` |
-| `OAI-SearchBot` | OpenAI | Índice de búsqueda de ChatGPT | Sí | 2026-08-25 | igual |
-| `ChatGPT-User` | OpenAI | Visita en directo pedida por una persona | **Puede no aplicarle** | 2026-08-25 | igual |
-| `OAI-AdsBot` | OpenAI | Comprobar páginas de destino de anuncios. No entrena modelos | **Su documentación no lo dice** | 2026-08-25 | igual |
-| `ClaudeBot` | Anthropic | Entrenamiento | Sí | 2026-08-25 | `support.claude.com`, artículo de rastreo |
-| `Claude-SearchBot` | Anthropic | Mejorar los resultados de búsqueda | Sí | 2026-08-25 | igual |
-| `Claude-User` | Anthropic | Visita pedida por una persona en Claude | Sí | 2026-08-25 | igual |
-| `PerplexityBot` | Perplexity | Índice para enlazar webs en sus respuestas | Sí | 2026-08-25 | `docs.perplexity.ai/guides/bots` |
-| `Perplexity-User` | Perplexity | Visita pedida por una persona | **No, lo ignora** | 2026-08-25 | igual |
-| `Googlebot` | Google | Índice de Búsqueda. **El que te borra si lo bloqueas** | Sí | 2026-08-25 | `developers.google.com/search/docs/crawling-indexing/google-common-crawlers` |
-| `Google-Extended` | Google | Solo entrenamiento de Gemini. **No afecta a la Búsqueda** | Sí | 2026-08-25 | igual |
-| `GoogleOther` | Google | Rastreo genérico de otros equipos de Google | Sí | 2026-08-25 | igual |
-| `Google-CloudVertexBot` | Google | Para quien construye agentes con Vertex AI | Sí | 2026-08-25 | igual |
-| `CCBot` | Common Crawl | Archivo público que luego usan muchos modelos | Sí | 2026-08-14 | `commoncrawl.org/ccbot` |
-| `Bytespider` | ByteDance | Entrenamiento | Declarado | 2026-08-14 | Documentación de ByteDance |
-| `Applebot-Extended` | Apple | Excluir del entrenamiento sin salir de Siri ni Spotlight | Sí | 2026-08-25 | `support.apple.com/en-us/119829` |
-| `meta-externalagent` | Meta | Entrenamiento | Sí | 2026-08-14 | Documentación de Meta |
-| `Amazonbot` | Amazon | Índice de Alexa y servicios propios | Sí | 2026-08-14 | Documentación de Amazon |
+| `GPTBot` | OpenAI | Entrenamiento de modelos | Sí | 2026-11-18 | `developers.openai.com/api/docs/bots` |
+| `OAI-SearchBot` | OpenAI | Índice de búsqueda de ChatGPT | Sí | 2026-11-18 | igual |
+| `ChatGPT-User` | OpenAI | Visita en directo pedida por una persona | **Puede no aplicarle** | 2026-11-18 | igual |
+| `OAI-AdsBot` | OpenAI | Comprobar páginas de destino de anuncios. No entrena modelos | **Su documentación no lo dice** | 2026-11-18 | igual |
+| `ClaudeBot` | Anthropic | Entrenamiento | Sí | 2026-11-18 | `support.claude.com`, artículo de rastreo |
+| `Claude-SearchBot` | Anthropic | Mejorar los resultados de búsqueda | Sí | 2026-11-18 | igual |
+| `Claude-User` | Anthropic | Visita pedida por una persona en Claude | Sí | 2026-11-18 | igual |
+| `Claude-Agent` | Anthropic | Navegador alojado que hace una tarea pedida por una persona. No es un rastreador | **No va por `robots.txt`**: se identifica por user-agent e IP | 2026-11-18 | `support.claude.com`, artículo de navegadores alojados |
+| `PerplexityBot` | Perplexity | Índice para enlazar webs en sus respuestas. No entrena modelos | Sí | 2026-11-18 | `docs.perplexity.ai/guides/bots` |
+| `Perplexity-User` | Perplexity | Visita pedida por una persona | **No, lo ignora** | 2026-11-18 | igual |
+| `Googlebot` | Google | Índice de Búsqueda. **El que te borra si lo bloqueas** | Sí | 2026-11-18 | `developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers` |
+| `Google-Extended` | Google | Token de control, no un rastreador: entrenamiento de futuros modelos Gemini y grounding en las apps de Gemini y en Vertex AI. **No afecta a la Búsqueda** | Sí | 2026-11-18 | igual |
+| `GoogleOther` | Google | Rastreo genérico de otros equipos de Google | Sí | 2026-11-18 | igual |
+| `Google-CloudVertexBot` | Google | Para quien construye agentes con Vertex AI | Sí | 2026-11-18 | igual |
+| `Google-Agent` | Google | Agentes de Google que visitan una web por encargo de una persona | **Por lo general no**: es un fetcher activado por el usuario | 2026-11-18 | `developers.google.com/crawling/docs/crawlers-fetchers/google-user-triggered-fetchers` |
+| `CCBot` | Common Crawl | Archivo público que luego usan muchos modelos | Sí | 2026-11-18 | `commoncrawl.org/ccbot` |
+| `Bytespider` | ByteDance | Entrenamiento | **Sin confirmar**: no hay página oficial localizada, y terceros publican que no siempre obedece | 2026-11-18 | Sin fuente primaria |
+| `Applebot-Extended` | Apple | No rastrea: decide si lo que recoge `Applebot` puede entrenar los modelos de Apple. No saca de Siri ni de Spotlight | Sí | 2026-11-18 | `support.apple.com/en-us/119829` |
+| `meta-externalagent` | Meta | Entrenamiento de modelos e indexación directa para sus productos | Sí, se bloquea con `Disallow` | 2026-11-18 | `developers.facebook.com/docs/sharing/webmasters/web-crawlers` |
+| `meta-webindexer` | Meta | Mejorar los resultados de búsqueda de Meta AI y poder citarte | **Su documentación no lo dice** | 2026-11-18 | igual |
+| `meta-externalfetcher` | Meta | Visita pedida por una persona o por un agente | **Puede saltárselo** | 2026-11-18 | igual |
+| `meta-externalads` | Meta | Publicidad y productos de empresa | **Su documentación no lo dice** | 2026-11-18 | igual |
+| `Amazonbot` | Amazon | Mejorar sus productos. **Puede entrenar sus modelos de IA** | Sí | 2026-11-18 | `developer.amazon.com/amazonbot` |
+| `Amzn-SearchBot` | Amazon | Búsqueda en sus productos, como Alexa. No entrena modelos | Sí. Si no se le nombra, sigue las reglas de los demás buscadores | 2026-11-18 | igual |
+| `Amzn-User` | Amazon | Visita en directo por una acción de una persona. No entrena modelos | **Puede no seguirlo entero** | 2026-11-18 | igual |
 
 **Rangos de IP publicados** (para comprobar en los logs si el bot era el de verdad o alguien
 poniéndose su nombre):
@@ -35,8 +42,14 @@ poniéndose su nombre):
 - OpenAI: `openai.com/gptbot.json`, `openai.com/searchbot.json`, `openai.com/chatgpt-user.json`,
   `openai.com/adsbot.json`.
 - Anthropic: `claude.com/crawling/bots.json`.
-- Perplexity: `www.perplexity.com/perplexitybot.json`, `www.perplexity.com/perplexity-user.json`.
-- Google: se comprueba por DNS inverso, no por lista.
+- Perplexity: `www.perplexity.ai/perplexitybot.json`, `www.perplexity.ai/perplexity-user.json`.
+- Google: DNS inverso, o sus listas `developers.google.com/static/search/apis/ipranges/googlebot.json`,
+  `developers.google.com/static/crawling/ipranges/common-crawlers.json` y
+  `developers.google.com/static/crawling/ipranges/user-triggered-fetchers.json`.
+- Common Crawl: `index.commoncrawl.org/ccbot.json`.
+- Amazon: `developer.amazon.com/amazonbot/ip-addresses/`, `.../searchbot-ip-addresses/` y
+  `.../live-ip-addresses/`.
+- `Claude-Agent`: `claude.com/.well-known/sail`.
 
 Bloquear por IP es mala idea: si el bot no puede leer tu `robots.txt`, tampoco puede obedecerlo.
 
@@ -50,14 +63,20 @@ Bloquear por IP es mala idea: si el bot no puede leer tu `robots.txt`, tampoco p
 
 La decisión es del dueño de la web. El agente propone y explica las consecuencias; no elige.
 
+**Señal nueva de preferencia, todavía en borrador.** Desde el 30 de octubre de 2026 Anthropic dice que
+empieza a reconocer una señal legible por máquina para decir «no al entrenamiento», basada en el trabajo
+del grupo `aipref` del IETF, y que la irá aplicando poco a poco. Si `robots.txt` nombra a `ClaudeBot`,
+manda esa regla sobre la señal general. No es un estándar cerrado: para decidir hoy, se escribe la regla
+con el nombre del bot.
+
 Y avisa de lo que `robots.txt` no puede: los raspadores no lo leen, y los bots de visita en directo
-de OpenAI y Perplexity pueden ignorarlo porque la petición nace de una persona. Si el objetivo es que
+de OpenAI, Perplexity, Google, Meta y Amazon pueden ignorarlo porque la petición nace de una persona. Si el objetivo es que
 un contenido no salga de ahí, la herramienta es una contraseña, no un archivo de texto.
 
 ## 3. Las funciones de IA de Google
 
 Google publicó su guía oficial el **15 de mayo de 2026**
-(`developers.google.com/search/docs/fundamentals/ai-optimization-guide`, verificada el 2026-08-25).
+(`developers.google.com/search/docs/fundamentals/ai-optimization-guide`, verificada el 2026-11-18).
 Lo que dice, con sus palabras:
 
 - **No hay algoritmo aparte.** "Las prácticas recomendadas de SEO siguen siendo relevantes porque
