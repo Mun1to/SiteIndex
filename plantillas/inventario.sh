@@ -37,7 +37,7 @@ if [ "$R" = "200" ]; then
   echo "  Disallow totales : $(grep -ci '^[[:space:]]*Disallow:[[:space:]]*/[[:space:]]*$' /tmp/si_robots.txt)"
   echo "  linea Sitemap    : $(grep -i '^[[:space:]]*Sitemap:' /tmp/si_robots.txt | sed 's/^[[:space:]]*//' | tr '\n' ' ')"
   echo "  bots de IA nombrados:"
-  IA=$(grep -ioE 'GPTBot|OAI-SearchBot|OAI-AdsBot|ChatGPT-User|ClaudeBot|Claude-SearchBot|Claude-User|anthropic-ai|CCBot|Google-Extended|PerplexityBot|Perplexity-User|Bytespider|Applebot-Extended|meta-externalagent|Amazonbot' /tmp/si_robots.txt | sort -u)
+  IA=$(grep -ioE 'GPTBot|OAI-SearchBot|OAI-AdsBot|ChatGPT-User|ClaudeBot|Claude-SearchBot|Claude-User|anthropic-ai|CCBot|Google-Extended|GoogleOther|Google-CloudVertexBot|PerplexityBot|Perplexity-User|Bytespider|Applebot-Extended|meta-externalagent|meta-externalfetcher|meta-webindexer|meta-externalads|Amazonbot|Amzn-SearchBot|Amzn-User' /tmp/si_robots.txt | sort -u)
   if [ -n "$IA" ]; then echo "$IA" | sed 's/^/    /'; else echo "    (ninguno: no hay decision de IA escrita)"; fi
 else
   echo "robots.txt: $R  (no hay)"
@@ -48,7 +48,8 @@ echo "-- 4. Sitemap --"
 for s in "sitemap.xml" "sitemap_index.xml" "sitemap-index.xml"; do
   code=$(curl -sS -o /tmp/si_sm.xml --max-time 20 -A "$UA" -w '%{http_code}' "$B/$s")
   if [ "$code" = "200" ]; then
-    echo "$s: 200, URLs listadas: $(grep -c '<loc>' /tmp/si_sm.xml), con lastmod: $(grep -c '<lastmod>' /tmp/si_sm.xml)"
+    TIPO="URLs listadas"; grep -qi '<sitemapindex' /tmp/si_sm.xml && TIPO="sitemaps hijos (es un indice)"
+    echo "$s: 200, $TIPO: $(grep -o '<loc>' /tmp/si_sm.xml | wc -l), con lastmod: $(grep -o '<lastmod>' /tmp/si_sm.xml | wc -l)"
   else
     echo "$s: $code"
   fi
@@ -64,16 +65,18 @@ echo
 echo "-- 6. Que trae el HTML de la portada (sin ejecutar JavaScript) --"
 C "$B/" > /tmp/si_home.html
 BYTES=$(wc -c < /tmp/si_home.html)
-TXT=$(sed -e 's/<script[^>]*>.*<\/script>//gI' -e 's/<[^>]*>/ /g' /tmp/si_home.html | tr -s ' \n' ' ')
-PAL=$(echo "$TXT" | wc -w)
+# Lo que ve quien abre la pagina: el <body> sin script, style, noscript, svg, template ni comentarios.
+perl -0777 -pe 's/<!--.*?-->/ /gs; s/<(script|style|noscript|svg|template)\b.*?<\/\1\s*>/ /gis; s/<head\b.*?<\/head\s*>/ /is; s/^.*?<body\b[^>]*>//is; s/<\/body\b.*$//is' /tmp/si_home.html > /tmp/si_body.html
+PAL=$(perl -0777 -ne 's/<[^>]+>/ /g; s/&#?\w+;/ /g; my $n = () = /\S*[[:alnum:]\x80-\xff]\S*/g; print $n' /tmp/si_body.html)
+TITULO=$(perl -0777 -ne 's/<!--.*?-->/ /gs; s/<(script|style|noscript|svg|template)\b.*?<\/\1\s*>/ /gis; if (/<title\b(?:[^>"\x27]|"[^"]*"|\x27[^\x27]*\x27)*>(.*?)<\/title\s*>/is) { my $t = $1; $t =~ s/\s+/ /g; $t =~ s/^ | $//g; print $t }' /tmp/si_home.html)
 echo "  bytes de HTML          : $BYTES"
-echo "  palabras visibles      : $PAL   (menos de ~80 suele significar que el texto lo pinta el JavaScript)"
-echo "  <title>                : $(grep -ioP '(?<=<title>).*?(?=</title>)' /tmp/si_home.html | head -1)"
+echo "  palabras visibles      : $PAL   (solo el body; menos de ~80 suele significar que el texto lo pinta el JavaScript)"
+echo "  <title>                : $TITULO"
 echo "  meta description       : $(grep -ioP '<meta[^>]+name=.description.[^>]*>' /tmp/si_home.html | head -1 | grep -ioP '(?<=content=.).*?(?=")' | cut -c1-90)"
 echo "  html lang              : $(grep -ioP '<html[^>]*lang="\K[^"]+' /tmp/si_home.html | head -1)"
 echo "  canonical              : $(grep -ioP 'rel="canonical"[^>]*href="\K[^"]+|href="\K[^"]+(?="[^>]*rel="canonical")' /tmp/si_home.html | head -1)"
 echo "  meta robots            : $(grep -ioP '<meta[^>]+name="robots"[^>]*>' /tmp/si_home.html | head -1)"
-echo "  numero de <h1>         : $(grep -oiE '<h1[ >]' /tmp/si_home.html | wc -l)"
+echo "  numero de <h1>         : $(grep -oiE '<h1[[:space:]>]' /tmp/si_body.html | wc -l)   (solo el body)"
 echo "  og: presentes          : $(grep -oiP '<meta[^>]+property="og:\K[^"]+' /tmp/si_home.html | sort -u | tr '\n' ' ')"
 echo "  twitter: presentes     : $(grep -oiP '<meta[^>]+name="twitter:\K[^"]+' /tmp/si_home.html | sort -u | tr '\n' ' ')"
 echo "  hreflang declarados    : $(grep -oiP 'hreflang="\K[^"]+' /tmp/si_home.html | sort -u | tr '\n' ' ')"
@@ -95,3 +98,4 @@ echo "-- 8. Rendimiento de bulto (no sustituye a PageSpeed) --"
 curl -sS -o /dev/null --max-time 30 -A "$UA" -w '  TTFB: %{time_starttransfer}s   total: %{time_total}s   peso HTML: %{size_download} bytes\n' "$B/"
 echo
 echo "== Fin. Lo que salga aqui YA esta hecho: no se vuelve a proponer. =="
+echo "Esto solo mira la portada. El resto de paginas: node plantillas/paginas.mjs $D"
