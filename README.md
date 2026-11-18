@@ -41,8 +41,10 @@ indexed", "review my robots.txt" or "I want ChatGPT to cite my page".
 
 **1. It looks before it talks.** Phase 0 runs a sweep against the live domain (`plantillas/inventario.sh`):
 redirects, robots, sitemap, head tags, JSON-LD types, analytics, rendered word count, and the DNS
-records that reveal whether the site is **already verified in Search Console and Bing**. Then it asks
-at most eight questions, and only the ones the sweep could not answer. Every line of the report
+records that reveal whether the site is **already verified in Search Console and Bing**. A second pass
+(`plantillas/paginas.mjs`) walks the whole sitemap page by page: repeated titles, missing `h1`, a
+canonical pointing elsewhere, `noindex` inside the sitemap, pages with no text in the HTML, and broken
+`hreflang` pairs. Then it asks at most eight questions, and only the ones the sweep could not answer. Every line of the report
 carries its real status: already done, missing, wrong, or not applicable. No generic checklist, no
 advice you already followed.
 
@@ -101,7 +103,8 @@ sees rather than what you see) and a checklist that answers with a status, never
 
 Templates you copy from:
 
-- `plantillas/inventario.sh`, the phase 0 sweep. Reads only, changes nothing.
+- `plantillas/inventario.sh`, the phase 0 sweep of the homepage. Reads only, changes nothing.
+- `plantillas/paginas.mjs`, the page-by-page review of the sitemap. Node 18+, no dependencies, reads only.
 - `plantillas/SEO-ESTADO.md`, the status sheet: done / missing / waiting / not applicable, plus what
   could not be checked, who has to fix each item, and the date each waiting item is worth reopening.
 - `plantillas/robots.txt`, commented, with three AI postures to choose from.
@@ -152,8 +155,9 @@ whatever you use. It is the same prompt in every public repository here, so you 
 > te dirá en tu idioma qué hace este programa de verdad: qué envía por internet, qué toca en tu
 > ordenador y qué ejecuta al instalarse.
 
-The only executable file here is `plantillas/inventario.sh`, and it only reads: `curl` against your
-own domain and a DNS lookup. Everything else is Markdown and reference files you copy from.
+The only executable files here are `plantillas/inventario.sh` and `plantillas/paginas.mjs`, and they
+only read: HTTP requests against the domain you point them at and a DNS lookup. Everything else is
+Markdown and reference files you copy from.
 
 ## License
 

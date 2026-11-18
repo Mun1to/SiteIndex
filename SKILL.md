@@ -87,11 +87,32 @@ Contesta solo, sin molestar al usuario, a esto:
 | Los `@type` de JSON-LD que ya hay | Evita proponer datos estructurados que ya están |
 | Etiqueta `google-site-verification`, `msvalidate.01` y los TXT del DNS | **Dice si la web ya está dada de alta en Search Console y en Bing** |
 | Qué herramienta de analítica está instalada | Evita proponer medición que ya existe |
-| Palabras visibles en el HTML servido | Detecta el contenido que solo existe tras ejecutar JavaScript |
+| Palabras visibles y número de `<h1>`, contando solo el `<body>` sin `script`, `style`, `noscript` ni `svg` | Detecta el contenido que solo existe tras ejecutar JavaScript |
 | TTFB y peso del HTML | Primer aviso de lentitud, no sustituye a PageSpeed |
 
-Si el dominio todavía no existe (web sin publicar), el barrido no aplica: se salta, se dice que se
-salta, y se trabaja sobre los archivos del repositorio.
+El barrido solo mira la portada. **Después se repasa el sitio entero**, página a página, recorriendo
+el sitemap (Node 18 o superior, sin instalar nada):
+
+```bash
+node plantillas/paginas.mjs dominio.com
+```
+
+| Lo que responde el repaso | Para qué sirve |
+|---|---|
+| Páginas del sitemap que no dan 200 | El sitemap solo debe listar URLs finales |
+| `<title>` y descripción vacíos o repetidos | Dos páginas con el mismo título compiten entre ellas. Dos idiomas enlazados por `hreflang` de ida y vuelta no cuentan como repetido |
+| `canonical` ausente o apuntando a otra página | Esa página le está diciendo al buscador que la buena es otra |
+| `noindex` dentro del sitemap | Señales contradictorias |
+| Páginas sin `<h1>` o con varios | La jerarquía de la fase 4 |
+| Páginas con menos de 80 palabras en el HTML | Contenido que solo pinta el JavaScript, o páginas vacías |
+| `hreflang` sin autorreferencia o sin enlace de vuelta | Google ignora las parejas que no se devuelven el enlace |
+| `og:image` ausente y JSON-LD que no se puede leer | Lo que falla al compartir y lo que no sirve a los buscadores |
+
+Enseña las 60 primeras páginas con algo que mirar; `--todas` las lista enteras y `--max=500` limita un
+sitio muy grande. Si la web no tiene sitemap, lo dice y mira solo la portada.
+
+Si el dominio todavía no existe (web sin publicar), ni el barrido ni el repaso aplican: se saltan, se
+dice que se saltan, y se trabaja sobre los archivos del repositorio.
 
 ### 0.2 Las preguntas, que son las que el barrido no puede contestar
 
@@ -619,6 +640,7 @@ sí a secas. Y si es `EN ESPERA`, con la fecha en la que se vuelve a mirar.
 **Fase 0, antes de nada**
 
 - [ ] ¿Barrido lanzado contra el dominio real y su salida pegada en la hoja de estado?
+- [ ] ¿Repaso página a página lanzado sobre el sitemap, con lo que ha salido en la hoja de estado?
 - [ ] ¿Preguntas hechas de una vez, sin preguntar nada que el barrido ya contestara?
 - [ ] ¿`SEO-ESTADO.md` escrito, con fecha y con quién arregla cada cosa?
 
@@ -676,7 +698,8 @@ Se dice de frente en vez de improvisar:
 
 **Plantillas** (se copian y se adaptan):
 
-- `plantillas/inventario.sh`, el barrido de la fase 0.
+- `plantillas/inventario.sh`, el barrido de la portada en la fase 0.
+- `plantillas/paginas.mjs`, el repaso página a página del sitemap en la fase 0.
 - `plantillas/SEO-ESTADO.md`, la hoja de estado con las tres columnas.
 - `plantillas/robots.txt`, comentado, con las tres posturas de IA para elegir.
 - `plantillas/head-meta.html`, la cabecera completa: title, descripción, canonical, Open Graph,
