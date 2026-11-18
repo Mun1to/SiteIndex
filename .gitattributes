@@ -2,3 +2,4 @@
 # Sin esto, un clon en Windows con core.autocrlf puede dejarlo en CRLF y entonces
 # falla con "bad interpreter: /usr/bin/env bash^M", que no se ve leyendo el archivo.
 *.sh text eol=lf
+*.mjs text eol=lf
